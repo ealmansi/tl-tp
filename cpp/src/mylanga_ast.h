@@ -21,13 +21,7 @@ struct ast_pred;
 struct ast_rel_pred;
 struct ast_bin_l_pred;
 struct ast_uny_l_pred;
-struct ast_const_value;
-struct ast_int_literal;
-struct ast_fp_literal;
-struct ast_pi_literal;
-struct ast_neg_int_literal;
-struct ast_neg_fp_literal;
-struct ast_neg_pi_literal;
+struct ast_literal;
 struct ast_fun_call;
 struct ast_stmt;
 struct ast_block;
@@ -39,6 +33,10 @@ struct ast_return_stmt;
 struct ast_plot_cmd;
 struct ast_fun_def;
 struct ast_program;
+
+typedef long double fp_t;
+extern const fp_t FP_T_PI;
+fp_t stofp_t(const string& str);
 
 /*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
 
@@ -55,9 +53,9 @@ struct ast_program;
   ptr<ast_fun_call>, _fc1,               \
   ptr<ast_fun_call>, _fc2,               \
   ptr<id>, _id,                          \
-  ptr<ast_const_value>, _cv1,            \
-  ptr<ast_const_value>, _cv2,            \
-  ptr<ast_const_value>, _cv3             
+  ptr<ast_literal>, _lt1,                \
+  ptr<ast_literal>, _lt2,                \
+  ptr<ast_literal>, _lt3                  
 
 #define ast_block_fields                 \
   ptr<list<ptr<ast_stmt>>>, _sts         
@@ -108,25 +106,14 @@ struct ast_program;
   int, _op,                              \
   ptr<ast_expr>, _ex                     
 
-#define ast_int_literal_fields           \
-  ptr<string>, _str                      
-
-#define ast_fp_literal_fields            \
-  ptr<string>, _str                      
-
-#define ast_neg_int_literal_fields       \
-  ptr<string>, _str                      
-
-#define ast_neg_fp_literal_fields        \
-  ptr<string>, _str                      
+#define ast_literal_fields               \
+  fp_t, _vl                              \
 
 #define ast_fun_call_fields              \
   ptr<id>, _id,                          \
   ptr<list<ptr<ast_expr>>>, _exs
 
 /*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
-
-typedef long double fp_t;
 
 struct symbol_table
 {
@@ -180,95 +167,14 @@ struct ast_uny_op_expr : ast_expr
   field_decls(ast_uny_op_expr_fields);
 };
 
-struct ast_pred
+struct ast_literal : ast_expr
 {
-  virtual ~ast_pred() {}
-};
-
-struct ast_rel_pred : ast_pred
-{
-  ast_rel_pred(ctor_params(ast_rel_pred_fields))
-    : init_list(ast_rel_pred_fields) {}
-  virtual ~ast_rel_pred() {}
-
-  field_decls(ast_rel_pred_fields);
-};
-
-struct ast_bin_l_pred : ast_pred
-{
-  ast_bin_l_pred(ctor_params(ast_bin_l_pred_fields))
-    : init_list(ast_bin_l_pred_fields) {}
-  virtual ~ast_bin_l_pred() {}
-
-  field_decls(ast_bin_l_pred_fields);
-};
-
-struct ast_uny_l_pred : ast_pred
-{
-  ast_uny_l_pred(ctor_params(ast_uny_l_pred_fields))
-    : init_list(ast_uny_l_pred_fields) {}
-  virtual ~ast_uny_l_pred() {}
-
-  field_decls(ast_uny_l_pred_fields);
-};
-
-struct ast_const_value
-{
-  virtual ~ast_const_value()  {}
-  virtual fp_t get_value() = 0;
-};
-
-struct ast_int_literal : ast_expr, ast_const_value
-{
-  ast_int_literal(ctor_params(ast_int_literal_fields))
-    : init_list(ast_int_literal_fields) {}
-  virtual ~ast_int_literal() {}
-  virtual fp_t get_value();
+  ast_literal(ctor_params(ast_literal_fields))
+    : init_list(ast_literal_fields) {}
+  virtual ~ast_literal() {}
   virtual fp_t eval(symbol_table& sym, context_data& cd);
 
-  field_decls(ast_int_literal_fields);
-};
-
-struct ast_fp_literal : ast_expr, ast_const_value
-{
-  ast_fp_literal(ctor_params(ast_fp_literal_fields))
-    : init_list(ast_fp_literal_fields) {}
-  virtual ~ast_fp_literal() {}
-  virtual fp_t get_value();
-  virtual fp_t eval(symbol_table& sym, context_data& cd);
-
-  field_decls(ast_fp_literal_fields);
-};
-
-struct ast_pi_literal : ast_expr, ast_const_value
-{
-  virtual fp_t get_value();
-  virtual fp_t eval(symbol_table& sym, context_data& cd);
-};
-
-struct ast_neg_int_literal : ast_const_value
-{
-  ast_neg_int_literal(ctor_params(ast_neg_int_literal_fields))
-    : init_list(ast_neg_int_literal_fields) {}
-  virtual ~ast_neg_int_literal() {}
-  virtual fp_t get_value();
-
-  field_decls(ast_neg_int_literal_fields);
-};
-
-struct ast_neg_fp_literal : ast_const_value
-{
-  ast_neg_fp_literal(ctor_params(ast_neg_fp_literal_fields))
-    : init_list(ast_neg_fp_literal_fields) {}
-  virtual ~ast_neg_fp_literal() {}
-  virtual fp_t get_value();
-
-  field_decls(ast_neg_fp_literal_fields);
-};
-
-struct ast_neg_pi_literal : ast_const_value
-{
-  virtual fp_t get_value();
+  field_decls(ast_literal_fields);
 };
 
 struct ast_fun_call : ast_expr
@@ -279,6 +185,42 @@ struct ast_fun_call : ast_expr
   virtual fp_t eval(symbol_table& sym, context_data& cd);
 
   field_decls(ast_fun_call_fields);
+};
+
+struct ast_pred
+{
+  virtual ~ast_pred() {}
+  virtual bool eval(symbol_table& sym, context_data& cd) = 0;
+};
+
+struct ast_rel_pred : ast_pred
+{
+  ast_rel_pred(ctor_params(ast_rel_pred_fields))
+    : init_list(ast_rel_pred_fields) {}
+  virtual ~ast_rel_pred() {}
+  virtual bool eval(symbol_table& sym, context_data& cd);
+
+  field_decls(ast_rel_pred_fields);
+};
+
+struct ast_bin_l_pred : ast_pred
+{
+  ast_bin_l_pred(ctor_params(ast_bin_l_pred_fields))
+    : init_list(ast_bin_l_pred_fields) {}
+  virtual ~ast_bin_l_pred() {}
+  virtual bool eval(symbol_table& sym, context_data& cd);
+
+  field_decls(ast_bin_l_pred_fields);
+};
+
+struct ast_uny_l_pred : ast_pred
+{
+  ast_uny_l_pred(ctor_params(ast_uny_l_pred_fields))
+    : init_list(ast_uny_l_pred_fields) {}
+  virtual ~ast_uny_l_pred() {}
+  virtual bool eval(symbol_table& sym, context_data& cd);
+
+  field_decls(ast_uny_l_pred_fields);
 };
 
 struct ast_stmt

@@ -1,6 +1,6 @@
-#line 2 "auto/tokens.cpp"
+#line 2 "src/auto/tokens.cpp"
 
-#line 4 "auto/tokens.cpp"
+#line 4 "src/auto/tokens.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -526,7 +526,7 @@ extern "C" int yywrap() { }
 
 
 
-#line 530 "auto/tokens.cpp"
+#line 530 "src/auto/tokens.cpp"
 
 #define INITIAL 0
 #define IN_SINGL_COMMENT 1
@@ -718,7 +718,7 @@ YY_DECL
 #line 20 "src/tokens.l"
 
 
-#line 722 "auto/tokens.cpp"
+#line 722 "src/auto/tokens.cpp"
 
 	if ( !(yy_init) )
 		{
@@ -1013,7 +1013,7 @@ YY_RULE_SETUP
 #line 71 "src/tokens.l"
 ECHO;
 	YY_BREAK
-#line 1017 "auto/tokens.cpp"
+#line 1017 "src/auto/tokens.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(IN_SINGL_COMMENT):
 case YY_STATE_EOF(IN_MULTI_COMMENT):

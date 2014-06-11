@@ -1,5 +1,5 @@
 SRC 	= src
-AUTO 	= auto
+AUTO 	= $(SRC)/auto
 BIN 	= bin
 DIRS 	= $(SRC) $(AUTO) $(BIN)
 
