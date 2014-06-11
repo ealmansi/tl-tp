@@ -1,6 +1,8 @@
 %{
 
 #include "mylanga_ast.h"
+#include "mylanga_sem_types.h"
+#define YYSTYPE mylanga_sem_types
 
 #include <string>
 #include <iostream>
@@ -30,9 +32,9 @@ extern "C" int yywrap() { }
 "return"                  yylval._int = KW_RETURN; return KW_RETURN;
 "function"                yylval._int = KW_FUNCTION; return KW_FUNCTION;
 "pi"                      yylval._int = KW_PI; return KW_PI;
-[a-zA-Z][a-zA-Z0-9_]*     yylval._id = new id(yytext, yyleng); return ID;
-[0-9]+                    yylval._str = new string(yytext, yyleng); return INT_LITERAL;
-[0-9]+\.[0-9]+            yylval._str = new string(yytext, yyleng); return FP_LITERAL;
+[a-zA-Z][a-zA-Z0-9_]*     yylval._id = mp<id>(yytext, yyleng); return ID;
+[0-9]+                    yylval._str = mp<string>(yytext, yyleng); return INT_LITERAL;
+[0-9]+\.[0-9]+            yylval._str = mp<string>(yytext, yyleng); return FP_LITERAL;
 "+"                       yylval._int = OP_PLUS; return OP_PLUS;
 "-"                       yylval._int = OP_MINUS; return OP_MINUS;
 "*"                       yylval._int = OP_MULT; return OP_MULT;

@@ -5,22 +5,22 @@ using namespace std;
 
 /*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
 
-bool symbol_table::fun_is_defined(id* _id)
+bool symbol_table::fun_is_defined(ptr<id> _id)
 {
   // todo
   return true;
 }
 
-void symbol_table::define_fun(id* _id, list<id*>* _ids, ast_block*)
+void symbol_table::define_fun(ptr<id> _id, ptr<list<ptr<id>>> _ids, ptr<ast_block>)
 {
   // todo
   return;
 }
 
-list<id*>* symbol_table::get_fun_params(id* _id)
+ptr<list<ptr<id>>> symbol_table::get_fun_params(ptr<id> _id)
 {
   // todo
-  return new list<id*>();
+  return mp<list<ptr<id>>>();
 }
 
 /*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
@@ -37,7 +37,7 @@ void context_data::pop_scope()
   return;
 }
 
-void context_data::set_var(id* _id, fp_t x)
+void context_data::set_var(ptr<id> _id, fp_t x)
 {
   // todo
   return;
@@ -54,7 +54,7 @@ void ast_program::run()
   _pc->plot(sym);
 }
 
-bool has_repeated_elements(list<id*>* _ids)
+bool has_repeated_elements(ptr<list<ptr<id>>> _ids)
 {
   for (auto _id1 : *_ids)
     for (auto _id2 : *_ids)
@@ -148,7 +148,7 @@ fp_t ast_fun_call::eval(symbol_table& sym, context_data& cd)
     return 0.0;
   }
   
-  list<id*>* _ids = sym.get_fun_params(_id);
+  ptr<list<ptr<id>>> _ids = sym.get_fun_params(_id);
   if (_ids->size() != _exs->size())
   {
     // error

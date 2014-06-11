@@ -84,33 +84,7 @@ extern int yydebug;
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE
-{
-/* Line 2053 of yacc.c  */
-#line 18 "src/parser.y"
 
-    int _int;
-    id* _id;
-    string* _str;
-    ast_program* _pg;
-    ast_fun_def* _fd;
-    ast_plot_cmd* _pc;
-    ast_block* _bl;
-    ast_stmt* _st;
-    ast_pred* _pr;
-    ast_fun_call* _fc;
-    ast_expr* _ex;
-    ast_const_value* _cv;
-    list<ast_fun_def*>* _fds;
-    list<ast_stmt*>* _sts;
-    list<id*>* _ids;
-    list<ast_expr*>* _exs;
-
-
-/* Line 2053 of yacc.c  */
-#line 112 "auto/parser.hpp"
-} YYSTYPE;
-# define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 #endif
