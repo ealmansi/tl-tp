@@ -15,7 +15,7 @@ $(AUTO)/tokens.cpp: $(SRC)/tokens.l $(AUTO)/parser.hpp $(SRC)/mylanga_ast.h $(SR
 	lex -o $@ $<
 
 $(BIN)/mylanga_parser: $(AUTO)/parser.cpp $(AUTO)/tokens.cpp $(SRC)/mylanga_ast.cpp $(SRC)/main.cpp
-	g++ -std=c++11 -I$(SRC) -o $@ $^
+	g++ -std=c++11 -I$(SRC) -I$(AUTO) -o $@ $^
 
 .PHONY: clean wipe
 
