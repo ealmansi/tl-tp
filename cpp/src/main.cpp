@@ -9,8 +9,8 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-  yyparse();
-  // pg->run();
+  if (yyparse() == 0)
+    pg->run();
 
   return 0;
 }
