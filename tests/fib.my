@@ -1,0 +1,20 @@
+function fib(n) {
+  if n < 2 then
+    return n
+
+  temp = 0
+  fib_n_1 = 0
+  fib_n = 1
+  while n > 0 {
+    temp = fib_n
+    fib_n = fib_n + fib_n_1
+    fib_n_1 = temp
+    n = n - 1
+  }
+  return fib_n
+}
+
+function id(n)
+  return n
+
+plot (id(n), fib(n)) for n=0..1..20

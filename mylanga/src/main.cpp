@@ -4,13 +4,13 @@ extern int yyparse();
 
 ptr<ast_program> pg;
 
-#include <iostream>
-using namespace std;
-
 int main(int argc, char **argv)
 {
-  if (yyparse() == 0)
-    pg->run();
+  if (yyparse() != 0)
+    return -1;
+
+  if (not pg->run())
+    return -1;
 
   return 0;
 }

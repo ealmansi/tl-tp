@@ -1,0 +1,4 @@
+function id(x)
+  return x
+
+plot (id(x), id(x * x)) for x = -10 .. 0.5 .. 10

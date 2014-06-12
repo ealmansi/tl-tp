@@ -10,7 +10,7 @@ using namespace std;
 #define YYSTYPE mylanga_sem_types
 
 extern int yylex();
-void yyerror(const char *s) { cout << "ERROR: " << s << endl; }
+void yyerror(const char *s) { cerr << "ERROR: " << s << endl; }
 
 extern ptr<ast_program> pg;
 

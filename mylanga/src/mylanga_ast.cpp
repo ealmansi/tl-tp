@@ -43,12 +43,24 @@ bool symbol_table::var_is_declared(ptr<id> _id)
 
 void symbol_table::set_var(ptr<id> _id, fp_t value)
 {
+  if (scopes.empty())
+  {
+    // error inesperado
+    cerr << "error inesperado" << endl;
+  }
+
   auto& scope = scopes.top();
   scope[*_id] = value;
 }
 
 maybe_fp_t symbol_table::get_var(ptr<id> _id)
 {
+  if (scopes.empty())
+  {
+    // error inesperado
+    cerr << "error inesperado" << endl;
+  }
+  
   auto& scope = scopes.top();
   return (scope.count(*_id) > 0) ? maybe_fp_t(scope[*_id]) : maybe_fp_t();
 }
@@ -461,23 +473,26 @@ bool has_repeated_elements(ptr<list<ptr<id>>> _ids)
 
 /*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
 
-void ast_program::run()
+bool ast_program::run()
 {
   symbol_table sym;
 
-  bool fds_are_valid = true;
+  bool is_valid = true;
   for (auto _fd : *_fds)
   {
     if (not (_fd->is_valid(sym)))
     {
-      fds_are_valid = false;
+      is_valid = false;
       continue;
     }
     
     sym.define_fun(_fd);
   }
 
-  if (_pc->is_valid(sym) and fds_are_valid)
+  is_valid = _pc->is_valid(sym) and is_valid;
+  if (is_valid)
     _pc->plot(sym);
+
+  return is_valid;
 }
 

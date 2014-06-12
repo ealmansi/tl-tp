@@ -337,7 +337,7 @@ struct ast_program
     : init_list(ast_program_fields) {}
   ~ast_program() {}
   bool is_valid(symbol_table& sym);
-  void run();
+  bool run();
 
   field_decls(ast_program_fields);
 };

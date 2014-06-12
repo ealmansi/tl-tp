@@ -1,0 +1,30 @@
+function fact(n) {
+  if n < 2 then
+    return 1
+  i = 1
+  while n > 0 {
+    i = i * n
+    n = n - 1
+  }
+  return i
+}
+
+function sin(x) {
+  x2 = x * x
+  res = 0
+  power_x = x
+  sign = 1
+  i = 0
+  while i < 30 {
+    res = res + sign * power_x / fact(2 * i + 1)
+    power_x = power_x * x2
+    sign = - sign
+    i = i + 1
+  }
+  return res
+}
+
+function id(x)
+  return x
+
+plot (id(x), sin(x)) for x=-pi..0.1..pi

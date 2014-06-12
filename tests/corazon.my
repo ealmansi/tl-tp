@@ -1,0 +1,48 @@
+function fact(n) {
+  if n < 2 then
+    return 1
+  i = 1
+  while n > 0 {
+    i = i * n
+    n = n - 1
+  }
+  return i
+}
+
+function sin(x) {
+  x2 = x * x
+  res = 0
+  power_x = x
+  sign = 1
+  i = 0
+  while i < 30 {
+    res = res + sign * power_x / fact(2 * i + 1)
+    power_x = power_x * x2
+    sign = - sign
+    i = i + 1
+  }
+  return res
+}
+
+function cos(x) {
+  x2 = x * x
+  res = 0
+  power_x = 1
+  sign = 1
+  i = 0
+  while i < 30 {
+    res = res + sign * power_x / fact(2 * i)
+    power_x = power_x * x2
+    sign = - sign
+    i = i + 1
+  }
+  return res
+}
+
+function corazon_x(t)
+  return 16 * sin(t) ^ 3
+
+function corazon_y(t)
+  return 13 * cos(t) - 5 * cos(2 * t) - 2 * cos(3 * t) - cos(4 * t)
+
+plot (corazon_x(t), corazon_y(t)) for t = -pi..0.1..pi
