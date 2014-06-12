@@ -140,7 +140,7 @@ fp_t ast_fun_call_expr::eval(symbol_table& sym)
 
 /*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
 
-bool ast_rel_pred::eval(symbol_table& sym)
+bool ast_rel_pred::test(symbol_table& sym)
 {
   switch (_op)
   {
@@ -155,23 +155,23 @@ bool ast_rel_pred::eval(symbol_table& sym)
   cerr << "error inesperado" << endl;
 }
 
-bool ast_bin_l_pred::eval(symbol_table& sym)
+bool ast_bin_l_pred::test(symbol_table& sym)
 {
   switch (_op)
   {
-    case L_OR: return _pr1->eval(sym) or _pr2->eval(sym);
-    case L_AND: return _pr1->eval(sym) and _pr2->eval(sym);
+    case L_OR: return _pr1->test(sym) or _pr2->test(sym);
+    case L_AND: return _pr1->test(sym) and _pr2->test(sym);
   }
   
   // error inesperado
   cerr << "error inesperado" << endl;
 }
 
-bool ast_uny_l_pred::eval(symbol_table& sym)
+bool ast_uny_l_pred::test(symbol_table& sym)
 {
   switch (_op)
   {
-    case L_NOT: return not _pr->eval(sym);
+    case L_NOT: return not _pr->test(sym);
   }
   
   // error inesperado
@@ -202,7 +202,7 @@ maybe_fp_t ast_var_assign_stmt::exec(symbol_table& sym)
 maybe_fp_t ast_if_then_stmt::exec(symbol_table& sym)
 {
   maybe_fp_t ret;
-  if (_pr->eval(sym))
+  if (_pr->test(sym))
     ret = _bl->exec(sym);
 
   return ret;
@@ -211,7 +211,7 @@ maybe_fp_t ast_if_then_stmt::exec(symbol_table& sym)
 maybe_fp_t ast_if_then_else_stmt::exec(symbol_table& sym)
 {
   maybe_fp_t ret;
-  if (_pr->eval(sym))
+  if (_pr->test(sym))
     ret = _bl1->exec(sym);
   else
     ret = _bl2->exec(sym);
@@ -222,7 +222,7 @@ maybe_fp_t ast_if_then_else_stmt::exec(symbol_table& sym)
 maybe_fp_t ast_while_stmt::exec(symbol_table& sym)
 {
   maybe_fp_t ret;
-  while (_pr->eval(sym))
+  while (_pr->test(sym))
   {
     ret = _bl->exec(sym);
     if (ret.is_valid) break;
@@ -509,3 +509,41 @@ bool ast_program::run()
   return is_valid;
 }
 
+/*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
+
+bool ast_syntax_error::is_valid(symbol_table& sym)
+{
+  // error sintaxis
+  cerr << "error sintaxis" << " " << _str << endl;
+  return false;
+}
+
+fp_t ast_syntax_error::eval(symbol_table& sym)
+{
+  // error inesperado
+  cerr << "error inesperado" << endl;
+}
+
+bool ast_syntax_error::test(symbol_table& sym)
+{
+  // error inesperado
+  cerr << "error inesperado" << endl;
+}
+
+maybe_fp_t ast_syntax_error::exec(symbol_table& sym)
+{
+  // error inesperado
+  cerr << "error inesperado" << endl;
+}
+
+void ast_syntax_error::plot(symbol_table& sym)
+{
+  // error inesperado
+  cerr << "error inesperado" << endl;
+}
+
+bool ast_syntax_error::run()
+{
+  // error inesperado
+  cerr << "error inesperado" << endl;
+}

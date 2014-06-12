@@ -40,6 +40,7 @@ extern "C" int yywrap() { }
 "*"                       yylval._int = OP_MULT; return OP_MULT;
 "/"                       yylval._int = OP_DIV; return OP_DIV;
 "^"                       yylval._int = OP_EXP; return OP_EXP;
+";"                       yylval._int = SEMICOLON; return SEMICOLON;
 ","                       yylval._int = COMMA; return COMMA;
 ".."                      yylval._int = ELLIPSIS; return ELLIPSIS;
 "="                       yylval._int = EQUAL; return EQUAL;

@@ -24,7 +24,7 @@ extern ptr<ast_program> pg;
 %token <_str> INT_LITERAL
 %token <_str> FP_LITERAL
 %token <_int> KW_FOR KW_PLOT KW_IF KW_THEN KW_ELSE KW_WHILE KW_RETURN KW_FUNCTION KW_PI
-%token <_int> EQUAL COMMA ELLIPSIS
+%token <_int> EQUAL COMMA SEMICOLON ELLIPSIS
 %token <_int> L_OR L_AND L_NOT
 %token <_int> REL_EQ REL_LT REL_LEQ REL_GEQ REL_GT
 %token <_int> LPAREN RPAREN LBRACE RBRACE
@@ -71,6 +71,9 @@ extern ptr<ast_program> pg;
 
 program
   : seq_fun_def plot_cmd          { pg = $$ = mp<ast_program>($1, $2); }
+
+  // error handling
+  | seq_fun_def                   { pg = $$ = mp<ast_program>($1, mp<ast_syntax_error>("program: seq_fun_def")); }
   ;
 
 fun_def
@@ -87,6 +90,9 @@ plot_cmd
 block
   : stmt                          { $$ = mp<ast_block>(mp<list<ptr<ast_stmt>>>(1, $1)); }
   | LBRACE seq_stmt RBRACE        { $$ = mp<ast_block>($2); }
+
+  // error handling
+  | LBRACE RBRACE                 { $$ = mp<ast_syntax_error>("block: LBRACE RBRACE"); }
   ;
 
 stmt
@@ -95,6 +101,11 @@ stmt
   | KW_IF pred KW_THEN block KW_ELSE block    { $$ = mp<ast_if_then_else_stmt>($2, $4, $6); }
   | KW_WHILE pred block                       { $$ = mp<ast_while_stmt>($2, $3); }
   | KW_RETURN expr                            { $$ = mp<ast_return_stmt>($2); }
+
+  // error handling
+  | KW_IF expr KW_THEN block                  { $$ = mp<ast_syntax_error>("stmt: KW_IF expr KW_THEN block"); }
+  | KW_IF expr KW_THEN block KW_ELSE block    { $$ = mp<ast_syntax_error>("stmt: KW_IF expr KW_THEN block KW_ELSE block"); }
+  | KW_WHILE expr block                       { $$ = mp<ast_syntax_error>("stmt: KW_WHILE expr block"); }
   ;
 
 expr
