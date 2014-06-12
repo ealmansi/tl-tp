@@ -114,7 +114,8 @@ struct ast_syntax_error;
   ptr<list<ptr<ast_expr>>>, _exs
 
 #define ast_syntax_error_fields          \
-  string, _str                      
+  string, _str,                          \
+  int, _ln                               
 
 /*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
 

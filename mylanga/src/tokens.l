@@ -11,6 +11,7 @@ using namespace std;
 #include "parser.hpp"
 
 extern "C" int yywrap() { }
+int line_num = 1;
 
 %}
 
@@ -22,7 +23,8 @@ extern "C" int yywrap() { }
 <INITIAL>{
 "//"                      BEGIN(IN_SINGL_COMMENT);
 "/*"                      BEGIN(IN_MULTI_COMMENT);
-[ \t\n]                   ;
+[ \t]                     ;
+\n                        ++line_num;
 "for"                     yylval._int = KW_FOR; return KW_FOR;
 "plot"                    yylval._int = KW_PLOT; return KW_PLOT;
 "if"                      yylval._int = KW_IF; return KW_IF;

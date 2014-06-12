@@ -514,7 +514,7 @@ bool ast_program::run()
 bool ast_syntax_error::is_valid(symbol_table& sym)
 {
   // error sintaxis
-  cerr << "error sintaxis" << " " << _str << endl;
+  cerr << "error sintaxis" << " " << "detectado en la línea" << " " << _ln << " " << _str << endl;
   return false;
 }
 

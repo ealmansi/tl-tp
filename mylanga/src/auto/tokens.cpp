@@ -369,8 +369,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 42
-#define YY_END_OF_BUFFER 43
+#define YY_NUM_RULES 43
+#define YY_END_OF_BUFFER 44
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -380,15 +380,15 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[86] =
     {   0,
-        0,    0,    0,    0,    0,    0,   43,   37,    3,    3,
-       27,   37,   33,   34,   18,   16,   22,   17,   37,   19,
-       14,   21,   28,   24,   32,   13,   20,   13,   13,   13,
-       13,   13,   13,   13,   35,   37,   36,   39,   38,   41,
-       42,   41,   26,   23,    2,    1,    0,   14,   29,   30,
-       31,   13,   13,   13,   13,    6,   12,   13,   13,   13,
-       13,   25,   40,   15,   13,    4,   13,   13,   13,   13,
-       13,    8,   13,    5,   13,    7,   13,   13,   13,    9,
-       13,   10,   13,   11,    0
+        0,    0,    0,    0,    0,    0,   44,   38,    3,    4,
+       28,   38,   34,   35,   19,   17,   23,   18,   38,   20,
+       15,   22,   29,   25,   33,   14,   21,   14,   14,   14,
+       14,   14,   14,   14,   36,   38,   37,   40,   39,   42,
+       43,   42,   27,   24,    2,    1,    0,   15,   30,   31,
+       32,   14,   14,   14,   14,    7,   13,   14,   14,   14,
+       14,   26,   41,   16,   14,    5,   14,   14,   14,   14,
+       14,    9,   14,    6,   14,    8,   14,   14,   14,   10,
+       14,   11,   14,   12,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -523,10 +523,11 @@ using namespace std;
 #include "parser.hpp"
 
 extern "C" int yywrap() { }
+int line_num = 1;
 
 
 
-#line 530 "src/auto/tokens.cpp"
+#line 531 "src/auto/tokens.cpp"
 
 #define INITIAL 0
 #define IN_SINGL_COMMENT 1
@@ -715,10 +716,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 20 "src/tokens.l"
+#line 21 "src/tokens.l"
 
 
-#line 722 "src/auto/tokens.cpp"
+#line 723 "src/auto/tokens.cpp"
 
 	if ( !(yy_init) )
 		{
@@ -803,222 +804,227 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 23 "src/tokens.l"
+#line 24 "src/tokens.l"
 BEGIN(IN_SINGL_COMMENT);
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 24 "src/tokens.l"
+#line 25 "src/tokens.l"
 BEGIN(IN_MULTI_COMMENT);
 	YY_BREAK
 case 3:
-/* rule 3 can match eol */
 YY_RULE_SETUP
-#line 25 "src/tokens.l"
+#line 26 "src/tokens.l"
 ;
 	YY_BREAK
 case 4:
+/* rule 4 can match eol */
 YY_RULE_SETUP
-#line 26 "src/tokens.l"
-yylval._int = KW_FOR; return KW_FOR;
+#line 27 "src/tokens.l"
+++line_num;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 27 "src/tokens.l"
-yylval._int = KW_PLOT; return KW_PLOT;
+#line 28 "src/tokens.l"
+yylval._int = KW_FOR; return KW_FOR;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 28 "src/tokens.l"
-yylval._int = KW_IF; return KW_IF;
+#line 29 "src/tokens.l"
+yylval._int = KW_PLOT; return KW_PLOT;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 29 "src/tokens.l"
-yylval._int = KW_THEN; return KW_THEN;
+#line 30 "src/tokens.l"
+yylval._int = KW_IF; return KW_IF;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 30 "src/tokens.l"
-yylval._int = KW_ELSE; return KW_ELSE;
+#line 31 "src/tokens.l"
+yylval._int = KW_THEN; return KW_THEN;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 31 "src/tokens.l"
-yylval._int = KW_WHILE; return KW_WHILE;
+#line 32 "src/tokens.l"
+yylval._int = KW_ELSE; return KW_ELSE;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 32 "src/tokens.l"
-yylval._int = KW_RETURN; return KW_RETURN;
+#line 33 "src/tokens.l"
+yylval._int = KW_WHILE; return KW_WHILE;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 33 "src/tokens.l"
-yylval._int = KW_FUNCTION; return KW_FUNCTION;
+#line 34 "src/tokens.l"
+yylval._int = KW_RETURN; return KW_RETURN;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 34 "src/tokens.l"
-yylval._int = KW_PI; return KW_PI;
+#line 35 "src/tokens.l"
+yylval._int = KW_FUNCTION; return KW_FUNCTION;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 35 "src/tokens.l"
-yylval._id = mp<id>(yytext, yyleng); return ID;
+#line 36 "src/tokens.l"
+yylval._int = KW_PI; return KW_PI;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 36 "src/tokens.l"
-yylval._str = mp<string>(yytext, yyleng); return INT_LITERAL;
+#line 37 "src/tokens.l"
+yylval._id = mp<id>(yytext, yyleng); return ID;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 37 "src/tokens.l"
-yylval._str = mp<string>(yytext, yyleng); return FP_LITERAL;
+#line 38 "src/tokens.l"
+yylval._str = mp<string>(yytext, yyleng); return INT_LITERAL;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 38 "src/tokens.l"
-yylval._int = OP_PLUS; return OP_PLUS;
+#line 39 "src/tokens.l"
+yylval._str = mp<string>(yytext, yyleng); return FP_LITERAL;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 39 "src/tokens.l"
-yylval._int = OP_MINUS; return OP_MINUS;
+#line 40 "src/tokens.l"
+yylval._int = OP_PLUS; return OP_PLUS;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 40 "src/tokens.l"
-yylval._int = OP_MULT; return OP_MULT;
+#line 41 "src/tokens.l"
+yylval._int = OP_MINUS; return OP_MINUS;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 41 "src/tokens.l"
-yylval._int = OP_DIV; return OP_DIV;
+#line 42 "src/tokens.l"
+yylval._int = OP_MULT; return OP_MULT;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 42 "src/tokens.l"
-yylval._int = OP_EXP; return OP_EXP;
+#line 43 "src/tokens.l"
+yylval._int = OP_DIV; return OP_DIV;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 43 "src/tokens.l"
-yylval._int = SEMICOLON; return SEMICOLON;
+#line 44 "src/tokens.l"
+yylval._int = OP_EXP; return OP_EXP;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 44 "src/tokens.l"
-yylval._int = COMMA; return COMMA;
+#line 45 "src/tokens.l"
+yylval._int = SEMICOLON; return SEMICOLON;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 45 "src/tokens.l"
-yylval._int = ELLIPSIS; return ELLIPSIS;
+#line 46 "src/tokens.l"
+yylval._int = COMMA; return COMMA;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 46 "src/tokens.l"
-yylval._int = EQUAL; return EQUAL;
+#line 47 "src/tokens.l"
+yylval._int = ELLIPSIS; return ELLIPSIS;
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 47 "src/tokens.l"
-yylval._int = L_OR; return L_OR;
+#line 48 "src/tokens.l"
+yylval._int = EQUAL; return EQUAL;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 48 "src/tokens.l"
-yylval._int = L_AND; return L_AND;
+#line 49 "src/tokens.l"
+yylval._int = L_OR; return L_OR;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 49 "src/tokens.l"
-yylval._int = L_NOT; return L_NOT;
+#line 50 "src/tokens.l"
+yylval._int = L_AND; return L_AND;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 50 "src/tokens.l"
-yylval._int = REL_LT; return REL_LT;
+#line 51 "src/tokens.l"
+yylval._int = L_NOT; return L_NOT;
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 51 "src/tokens.l"
-yylval._int = REL_LEQ; return REL_LEQ;
+#line 52 "src/tokens.l"
+yylval._int = REL_LT; return REL_LT;
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 52 "src/tokens.l"
-yylval._int = REL_EQ; return REL_EQ;
+#line 53 "src/tokens.l"
+yylval._int = REL_LEQ; return REL_LEQ;
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 53 "src/tokens.l"
-yylval._int = REL_GEQ; return REL_GEQ;
+#line 54 "src/tokens.l"
+yylval._int = REL_EQ; return REL_EQ;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 54 "src/tokens.l"
-yylval._int = REL_GT; return REL_GT;
+#line 55 "src/tokens.l"
+yylval._int = REL_GEQ; return REL_GEQ;
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 55 "src/tokens.l"
-yylval._int = LPAREN; return LPAREN;
+#line 56 "src/tokens.l"
+yylval._int = REL_GT; return REL_GT;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 56 "src/tokens.l"
-yylval._int = RPAREN; return RPAREN;
+#line 57 "src/tokens.l"
+yylval._int = LPAREN; return LPAREN;
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 57 "src/tokens.l"
-yylval._int = LBRACE; return LBRACE;
+#line 58 "src/tokens.l"
+yylval._int = RPAREN; return RPAREN;
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 58 "src/tokens.l"
-yylval._int = RBRACE; return RBRACE;
+#line 59 "src/tokens.l"
+yylval._int = LBRACE; return LBRACE;
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 59 "src/tokens.l"
+#line 60 "src/tokens.l"
+yylval._int = RBRACE; return RBRACE;
+	YY_BREAK
+case 38:
+YY_RULE_SETUP
+#line 61 "src/tokens.l"
 cout << "Lexer error: Token inesperado \"" << string(yytext, yyleng) << "\"" << endl; yyterminate();
 	YY_BREAK
 
 
-case 38:
-/* rule 38 can match eol */
+case 39:
+/* rule 39 can match eol */
 YY_RULE_SETUP
-#line 63 "src/tokens.l"
+#line 65 "src/tokens.l"
 BEGIN(INITIAL);
 	YY_BREAK
-case 39:
-YY_RULE_SETUP
-#line 64 "src/tokens.l"
-;
-	YY_BREAK
-
-
 case 40:
 YY_RULE_SETUP
-#line 68 "src/tokens.l"
-BEGIN(INITIAL);
-	YY_BREAK
-case 41:
-YY_RULE_SETUP
-#line 69 "src/tokens.l"
+#line 66 "src/tokens.l"
 ;
 	YY_BREAK
 
+
+case 41:
+YY_RULE_SETUP
+#line 70 "src/tokens.l"
+BEGIN(INITIAL);
+	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 72 "src/tokens.l"
+#line 71 "src/tokens.l"
+;
+	YY_BREAK
+
+case 43:
+YY_RULE_SETUP
+#line 74 "src/tokens.l"
 ECHO;
 	YY_BREAK
-#line 1022 "src/auto/tokens.cpp"
+#line 1028 "src/auto/tokens.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(IN_SINGL_COMMENT):
 case YY_STATE_EOF(IN_MULTI_COMMENT):
@@ -2018,6 +2024,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 72 "src/tokens.l"
+#line 74 "src/tokens.l"
 
 

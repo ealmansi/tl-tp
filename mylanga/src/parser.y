@@ -9,10 +9,11 @@ using namespace std;
 #include "mylanga_sem_types.h"
 #define YYSTYPE mylanga_sem_types
 
-extern int yylex();
-void yyerror(const char *s) { cerr << "ERROR: " << s << endl; }
-
+extern int line_num; int temp;
 extern ptr<ast_program> pg;
+
+extern int yylex();
+void yyerror(const char *s) { cerr << "error sintaxis" << " " << "detectado en la línea " << line_num << endl; }
 
 %}
 
@@ -73,18 +74,28 @@ program
   : seq_fun_def plot_cmd          { pg = $$ = mp<ast_program>($1, $2); }
 
   // error handling
-  | seq_fun_def                   { pg = $$ = mp<ast_program>($1, mp<ast_syntax_error>("program: seq_fun_def")); }
+  | seq_fun_def                   { pg = $$ = mp<ast_program>($1, mp<ast_syntax_error>("program: seq_fun_def", line_num)); }
+  | plot_cmd                      { pg = $$ = mp<ast_program>(mp<list<ptr<ast_fun_def>>>(1, mp<ast_syntax_error>("program: plot_cmd", line_num)), $1); }
+  | /* */                         { pg = $$ = mp<ast_program>(mp<list<ptr<ast_fun_def>>>(1, mp<ast_syntax_error>("program: /* */", line_num)), mp<ast_syntax_error>("program: /* */", line_num)); }
   ;
 
 fun_def
   : KW_FUNCTION ID LPAREN lst_id RPAREN block
                                   { $$ = mp<ast_fun_def>($2, $4, $6); }
+
+  // error handling
+  | KW_FUNCTION ID LPAREN lst_id RPAREN /* */
+                                  { $$ = mp<ast_syntax_error>("fun_def: KW_FUNCTION ID LPAREN lst_id RPAREN /* */", line_num); }
   ;
 
 plot_cmd
   : KW_PLOT LPAREN expr COMMA expr RPAREN
     KW_FOR ID EQUAL expr ELLIPSIS expr ELLIPSIS expr
                                   { $$ = mp<ast_plot_cmd>($3, $5, $8, $10, $12, $14); }
+
+  // error handling
+  | KW_PLOT LPAREN expr COMMA expr RPAREN /* */
+                                  { $$ = mp<ast_syntax_error>("plot_cmd: KW_PLOT LPAREN expr COMMA expr RPAREN /* */", line_num); }  
   ;
 
 block
@@ -92,7 +103,7 @@ block
   | LBRACE seq_stmt RBRACE        { $$ = mp<ast_block>($2); }
 
   // error handling
-  | LBRACE RBRACE                 { $$ = mp<ast_syntax_error>("block: LBRACE RBRACE"); }
+  | LBRACE RBRACE                 { $$ = mp<ast_syntax_error>("block: LBRACE RBRACE", line_num); }
   ;
 
 stmt
@@ -103,9 +114,14 @@ stmt
   | KW_RETURN expr                            { $$ = mp<ast_return_stmt>($2); }
 
   // error handling
-  | KW_IF expr KW_THEN block                  { $$ = mp<ast_syntax_error>("stmt: KW_IF expr KW_THEN block"); }
-  | KW_IF expr KW_THEN block KW_ELSE block    { $$ = mp<ast_syntax_error>("stmt: KW_IF expr KW_THEN block KW_ELSE block"); }
-  | KW_WHILE expr block                       { $$ = mp<ast_syntax_error>("stmt: KW_WHILE expr block"); }
+  | error EQUAL expr                                { $$ = mp<ast_syntax_error>("stmt: error EQUAL expr", line_num); }
+  | ID EQUAL error                                  { $$ = mp<ast_syntax_error>("stmt: ID EQUAL error", line_num); }
+  | KW_IF expr { temp = line_num; } KW_THEN block   { $$ = mp<ast_syntax_error>("stmt: KW_IF expr KW_THEN block", temp); }
+  | KW_WHILE expr { temp = line_num; } block        { $$ = mp<ast_syntax_error>("stmt: KW_WHILE expr block", temp); }
+  | KW_IF pred { temp = line_num; } block           { $$ = mp<ast_syntax_error>("stmt: KW_IF pred block", temp); }
+  | KW_IF error                                     { $$ = mp<ast_syntax_error>("stmt: KW_IF error", line_num); }
+  | KW_WHILE error                                  { $$ = mp<ast_syntax_error>("stmt: KW_WHILE error", line_num); }
+  | KW_RETURN error                                 { $$ = mp<ast_syntax_error>("stmt: KW_RETURN error", line_num); }
   ;
 
 expr
@@ -121,6 +137,14 @@ expr
   | expr OP_EXP expr              { $$ = mp<ast_bin_op_expr>($1, $2, $3); }
   | ID LPAREN lst_expr RPAREN     { $$ = mp<ast_fun_call_expr>($1, $3); }
   | LPAREN expr RPAREN            { $$ = $2; }
+
+  // error handling
+  | expr OP_PLUS error             { $$ = mp<ast_syntax_error>("expr: expr OP_PLUS error", line_num); }
+  | expr OP_MINUS error            { $$ = mp<ast_syntax_error>("expr: expr OP_MINUS error", line_num); }
+  | expr OP_MULT error             { $$ = mp<ast_syntax_error>("expr: expr OP_MULT error", line_num); }
+  | expr OP_DIV error              { $$ = mp<ast_syntax_error>("expr: expr OP_DIV error", line_num); }
+  | expr OP_EXP error              { $$ = mp<ast_syntax_error>("expr: expr OP_EXP error", line_num); }
+  | LPAREN error RPAREN            { $$ = mp<ast_syntax_error>("expr: LPAREN error RPAREN", line_num); }
   ;
 
 pred
@@ -133,6 +157,16 @@ pred
   | pred L_AND pred               { $$ = mp<ast_bin_l_pred>($1, $2, $3); }
   | L_NOT pred                    { $$ = mp<ast_uny_l_pred>($1, $2); }
   | LPAREN pred RPAREN            { $$ = $2; }
+
+  // error handling
+  | expr REL_LT error              { $$ = mp<ast_syntax_error>("pred: expr REL_LT error", line_num); }
+  | expr REL_LEQ error             { $$ = mp<ast_syntax_error>("pred: expr REL_LEQ error", line_num); }
+  | expr REL_EQ error              { $$ = mp<ast_syntax_error>("pred: expr REL_EQ error", line_num); }
+  | expr REL_GEQ error             { $$ = mp<ast_syntax_error>("pred: expr REL_GEQ error", line_num); }
+  | expr REL_GT error              { $$ = mp<ast_syntax_error>("pred: expr REL_GT error", line_num); }
+  | pred L_OR error                { $$ = mp<ast_syntax_error>("pred: pred L_OR error", line_num); }
+  | pred L_AND error               { $$ = mp<ast_syntax_error>("pred: pred L_AND error", line_num); }
+  | L_NOT error                    { $$ = mp<ast_syntax_error>("pred: L_NOT error", line_num); }
   ;
 
 seq_fun_def
