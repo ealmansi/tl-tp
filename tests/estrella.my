@@ -24,7 +24,19 @@ function sin(x) {
   return res
 }
 
-function id(x)
-  return x
+function cos(x) {
+  x2 = x * x
+  res = 0
+  power_x = 1
+  sign = 1
+  i = 0
+  while i < 30 {
+    res = res + sign * power_x / fact(2 * i)
+    power_x = power_x * x2
+    sign = - sign
+    i = i + 1
+  }
+  return res
+}
 
-plot (id(x), sin(x)) for x=0..0.1..2*pi
+plot (10 * cos(t) + 2 * cos(t * 5), 10 * sin(t) - 2 * sin(t * 5)) for t = -pi..0.1..pi
