@@ -21,9 +21,7 @@ struct mylanga_sem_types
   ptr<ast_block> _bl = nullptr;
   ptr<ast_stmt> _st = nullptr;
   ptr<ast_pred> _pr = nullptr;
-  ptr<ast_fun_call> _fc = nullptr;
   ptr<ast_expr> _ex = nullptr;
-  ptr<ast_literal> _lt = nullptr;
   ptr<list<ptr<ast_fun_def>>> _fds = nullptr;
   ptr<list<ptr<ast_stmt>>> _sts = nullptr;
   ptr<list<ptr<id>>> _ids = nullptr;

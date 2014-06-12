@@ -17,6 +17,7 @@ using ptr = shared_ptr<T>;
 #define mp make_shared
 
 struct ast_expr;
+struct ast_literal_expr;
 struct ast_id_expr;
 struct ast_bin_op_expr;
 struct ast_uny_op_expr;
@@ -24,8 +25,7 @@ struct ast_pred;
 struct ast_rel_pred;
 struct ast_bin_l_pred;
 struct ast_uny_l_pred;
-struct ast_literal;
-struct ast_fun_call;
+struct ast_fun_call_expr;
 struct ast_stmt;
 struct ast_block;
 struct ast_var_assign_stmt;
@@ -49,12 +49,12 @@ struct ast_program;
   ptr<ast_block>, _bl                    
 
 #define ast_plot_cmd_fields              \
-  ptr<ast_fun_call>, _fc1,               \
-  ptr<ast_fun_call>, _fc2,               \
+  ptr<ast_expr>, _ex_x,                  \
+  ptr<ast_expr>, _ex_y,                  \
   ptr<id>, _id,                          \
-  ptr<ast_literal>, _lt1,                \
-  ptr<ast_literal>, _lt2,                \
-  ptr<ast_literal>, _lt3                  
+  ptr<ast_expr>, _ex1,                   \
+  ptr<ast_expr>, _ex2,                   \
+  ptr<ast_expr>, _ex3                  
 
 #define ast_block_fields                 \
   ptr<list<ptr<ast_stmt>>>, _sts         
@@ -93,6 +93,9 @@ struct ast_program;
   int, _op,                              \
   ptr<ast_pred>, _pr                     
 
+#define ast_literal_expr_fields          \
+  fp_t, _vl
+
 #define ast_id_expr_fields               \
   ptr<id>, _id                           
 
@@ -105,10 +108,7 @@ struct ast_program;
   int, _op,                              \
   ptr<ast_expr>, _ex                     
 
-#define ast_literal_fields               \
-  fp_t, _vl                              \
-
-#define ast_fun_call_fields              \
+#define ast_fun_call_expr_fields         \
   ptr<id>, _id,                          \
   ptr<list<ptr<ast_expr>>>, _exs
 
@@ -140,6 +140,17 @@ struct ast_expr
   virtual ~ast_expr() {}
   virtual bool is_valid(symbol_table& sym) = 0;
   virtual fp_t eval(symbol_table& sym) = 0;
+};
+
+struct ast_literal_expr : ast_expr
+{
+  ast_literal_expr(ctor_params(ast_literal_expr_fields))
+    : init_list(ast_literal_expr_fields) {}
+  ~ast_literal_expr() {}
+  bool is_valid(symbol_table& sym);
+  fp_t eval(symbol_table& sym);
+
+  field_decls(ast_literal_expr_fields);
 };
 
 struct ast_id_expr : ast_expr
@@ -175,26 +186,15 @@ struct ast_uny_op_expr : ast_expr
   field_decls(ast_uny_op_expr_fields);
 };
 
-struct ast_literal : ast_expr
+struct ast_fun_call_expr : ast_expr
 {
-  ast_literal(ctor_params(ast_literal_fields))
-    : init_list(ast_literal_fields) {}
-  ~ast_literal() {}
+  ast_fun_call_expr(ctor_params(ast_fun_call_expr_fields))
+    : init_list(ast_fun_call_expr_fields) {}
+  ~ast_fun_call_expr() {}
   bool is_valid(symbol_table& sym);
   fp_t eval(symbol_table& sym);
 
-  field_decls(ast_literal_fields);
-};
-
-struct ast_fun_call : ast_expr
-{
-  ast_fun_call(ctor_params(ast_fun_call_fields))
-    : init_list(ast_fun_call_fields) {}
-  ~ast_fun_call() {}
-  bool is_valid(symbol_table& sym);
-  fp_t eval(symbol_table& sym);
-
-  field_decls(ast_fun_call_fields);
+  field_decls(ast_fun_call_expr_fields);
 };
 
 struct ast_pred

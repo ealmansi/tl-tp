@@ -41,8 +41,6 @@ extern ptr<ast_program> pg;
 %type <_st> stmt
 %type <_ex> expr
 %type <_pr> pred
-%type <_fc> fun_call
-%type <_lt> literal signed_literal
 %type <_fds> seq_fun_def
 %type <_sts> seq_stmt
 %type <_ids> lst_id
@@ -81,8 +79,8 @@ fun_def
   ;
 
 plot_cmd
-  : KW_PLOT LPAREN fun_call COMMA fun_call RPAREN
-    KW_FOR ID EQUAL signed_literal ELLIPSIS signed_literal ELLIPSIS signed_literal
+  : KW_PLOT LPAREN expr COMMA expr RPAREN
+    KW_FOR ID EQUAL expr ELLIPSIS expr ELLIPSIS expr
                                   { $$ = mp<ast_plot_cmd>($3, $5, $8, $10, $12, $14); }
   ;
 
@@ -100,15 +98,17 @@ stmt
   ;
 
 expr
-  : literal                       { $$ = $1; }
+  : INT_LITERAL                   { $$ = mp<ast_literal_expr>(stofp_t(*$1)); }
+  | FP_LITERAL                    { $$ = mp<ast_literal_expr>(stofp_t(*$1)); }
+  | KW_PI                         { $$ = mp<ast_literal_expr>(FP_T_PI); }
   | ID                            { $$ = mp<ast_id_expr>($1); }
-  | fun_call                      { $$ = $1; }
   | expr OP_PLUS expr             { $$ = mp<ast_bin_op_expr>($1, $2, $3); }
   | expr OP_MINUS expr            { $$ = mp<ast_bin_op_expr>($1, $2, $3); }
   | expr OP_MULT expr             { $$ = mp<ast_bin_op_expr>($1, $2, $3); }
   | expr OP_DIV expr              { $$ = mp<ast_bin_op_expr>($1, $2, $3); }
   | OP_MINUS expr %prec UMINUS    { $$ = mp<ast_uny_op_expr>($1, $2); }
   | expr OP_EXP expr              { $$ = mp<ast_bin_op_expr>($1, $2, $3); }
+  | ID LPAREN lst_expr RPAREN     { $$ = mp<ast_fun_call_expr>($1, $3); }
   | LPAREN expr RPAREN            { $$ = $2; }
   ;
 
@@ -122,21 +122,6 @@ pred
   | pred L_AND pred               { $$ = mp<ast_bin_l_pred>($1, $2, $3); }
   | L_NOT pred                    { $$ = mp<ast_uny_l_pred>($1, $2); }
   | LPAREN pred RPAREN            { $$ = $2; }
-  ;
-
-literal
-  : INT_LITERAL                   { $$ = mp<ast_literal>(stofp_t(*$1)); }
-  | FP_LITERAL                    { $$ = mp<ast_literal>(stofp_t(*$1)); }
-  | KW_PI                         { $$ = mp<ast_literal>(FP_T_PI); }
-  ;
-
-signed_literal
-  : literal                       { $$ = $1; }
-  | OP_MINUS literal              { $$ = mp<ast_literal>(-$2->_vl); }
-  ;
-
-fun_call
-  : ID LPAREN lst_expr RPAREN     { $$ = mp<ast_fun_call>($1, $3); }
   ;
 
 seq_fun_def

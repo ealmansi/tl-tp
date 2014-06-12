@@ -60,12 +60,17 @@ maybe_fp_t symbol_table::get_var(ptr<id> _id)
     // error inesperado
     cerr << "error inesperado" << endl;
   }
-  
+
   auto& scope = scopes.top();
   return (scope.count(*_id) > 0) ? maybe_fp_t(scope[*_id]) : maybe_fp_t();
 }
 
 /*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
+
+fp_t ast_literal_expr::eval(symbol_table& sym)
+{
+  return _vl;
+}
 
 fp_t ast_id_expr::eval(symbol_table& sym)
 {
@@ -106,12 +111,7 @@ fp_t ast_uny_op_expr::eval(symbol_table& sym)
   cerr << "error inesperado" << endl;
 }
 
-fp_t ast_literal::eval(symbol_table& sym)
-{
-  return _vl;
-}
-
-fp_t ast_fun_call::eval(symbol_table& sym)
+fp_t ast_fun_call_expr::eval(symbol_table& sym)
 {
   list<fp_t> args;
   for (auto _ex : *_exs)
@@ -240,25 +240,32 @@ maybe_fp_t ast_return_stmt::exec(symbol_table& sym)
 
 void ast_plot_cmd::plot(symbol_table& sym)
 {
-  fp_t range_from = _lt1->_vl,
-  range_step = _lt2->_vl,
-  range_to = _lt3->_vl;
+  sym.open_scope();
+
+  fp_t range_from = _ex1->eval(sym),
+  range_step = _ex2->eval(sym),
+  range_to = _ex3->eval(sym);
 
   for (fp_t x = range_from; x <= range_to; x += range_step)
   {
-    sym.open_scope();
     sym.set_var(_id, x);
 
-    fp_t x_value = _fc1->eval(sym),
-    y_value = _fc2->eval(sym);
+    fp_t x_value = _ex_x->eval(sym),
+    y_value = _ex_y->eval(sym);
 
     cout << x_value << " " << y_value << endl;
 
-    sym.close_scope();
   }
+
+  sym.close_scope();
 }
 
 /*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
+
+bool ast_literal_expr::is_valid(symbol_table& sym)
+{
+  return true;
+}
 
 bool ast_id_expr::is_valid(symbol_table& sym)
 {
@@ -290,12 +297,7 @@ bool ast_uny_op_expr::is_valid(symbol_table& sym)
   return res;
 }
 
-bool ast_literal::is_valid(symbol_table& sym)
-{
-  return true;
-}
-
-bool ast_fun_call::is_valid(symbol_table& sym)
+bool ast_fun_call_expr::is_valid(symbol_table& sym)
 {
   bool res = true;
 
@@ -409,22 +411,32 @@ bool ast_plot_cmd::is_valid(symbol_table& sym)
 {
   bool res = true;
 
-  fp_t range_from = _lt1->_vl,
-  range_step = _lt2->_vl,
-  range_to = _lt3->_vl;
-
-  if (not (range_from <= range_to and 0 < range_step))
-  {
-    // error semántico
-    cerr << "error semántico" << " " << __PRETTY_FUNCTION__ << endl;
-    res = false;
-  }
-
   sym.open_scope();
-  sym.declare_var(_id);
 
-  res = _fc1->is_valid(sym) and res;
-  res = _fc2->is_valid(sym) and res;
+  do
+  {
+    res = _ex1->is_valid(sym) and res;
+    res = _ex2->is_valid(sym) and res;
+    res = _ex3->is_valid(sym) and res;
+    if (not res) break;
+
+    fp_t range_from = _ex1->eval(sym),
+    range_step = _ex2->eval(sym),
+    range_to = _ex3->eval(sym);
+
+    if (not (range_from <= range_to and 0 < range_step))
+    {
+      // error semántico
+      cerr << "error semántico" << " " << __PRETTY_FUNCTION__ << endl;
+      res = false;
+    }
+
+    sym.declare_var(_id);
+
+    res = _ex_x->is_valid(sym) and res;
+    res = _ex_y->is_valid(sym) and res;
+
+  } while (false);
 
   sym.close_scope();
 
@@ -490,6 +502,7 @@ bool ast_program::run()
   }
 
   is_valid = _pc->is_valid(sym) and is_valid;
+  
   if (is_valid)
     _pc->plot(sym);
 
