@@ -4,6 +4,7 @@
 #include <iostream>
 using namespace std;
 
+#include "mylanga_fp_t.h"
 #include "mylanga_ast.h"
 #include "mylanga_sem_types.h"
 #define YYSTYPE mylanga_sem_types

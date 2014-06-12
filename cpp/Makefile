@@ -1,27 +1,41 @@
 SRC 	= src
 AUTO 	= $(SRC)/auto
+OBJ 	= obj
 BIN 	= bin
-DIRS 	= $(SRC) $(AUTO) $(BIN)
+OUTPUT_DIRS 	= $(OBJ) $(AUTO) $(BIN)
+CXXFLAGS 	= -std=c++11 -I$(SRC) -I$(AUTO)
 
-all: $(DIRS) $(BIN)/mylanga_parser
+all: $(OUTPUT_DIRS) $(BIN)/mylanga_parser
 
-$(DIRS):
-	mkdir -p $(DIRS)
+$(OUTPUT_DIRS):
+	mkdir -p $(OUTPUT_DIRS)
 	
-$(AUTO)/parser.hpp $(AUTO)/parser.cpp: $(SRC)/parser.y $(SRC)/mylanga_ast.h $(SRC)/mylanga_sem_types.h
+$(AUTO)/parser.hpp $(AUTO)/parser.cpp: $(SRC)/parser.y
 	bison -d -o $@ $<
 	
-$(AUTO)/tokens.cpp: $(SRC)/tokens.l $(AUTO)/parser.hpp $(SRC)/mylanga_ast.h $(SRC)/mylanga_sem_types.h
+$(AUTO)/tokens.cpp: $(SRC)/tokens.l
 	lex -o $@ $<
 
-$(BIN)/mylanga_parser: $(AUTO)/parser.cpp $(AUTO)/tokens.cpp $(SRC)/mylanga_ast.cpp $(SRC)/main.cpp
-	g++ -std=c++11 -I$(SRC) -I$(AUTO) -o $@ $^
+$(OBJ)/parser.o: $(AUTO)/parser.cpp $(SRC)/mylanga_fp_t.h $(SRC)/mylanga_ast.h $(SRC)/mylanga_sem_types.h
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(OBJ)/tokens.o: $(AUTO)/tokens.cpp $(SRC)/mylanga_ast.h $(SRC)/mylanga_sem_types.h $(AUTO)/parser.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(OBJ)/mylanga_fp_t.o: $(SRC)/mylanga_fp_t.cpp $(SRC)/mylanga_fp_t.h
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(OBJ)/mylanga_ast.o: $(SRC)/mylanga_ast.cpp $(SRC)/mylanga_fp_t.h $(SRC)/mylanga_ast.h $(SRC)/mylanga_sem_types.h $(AUTO)/parser.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(BIN)/mylanga_parser: $(SRC)/main.cpp $(OBJ)/parser.o $(OBJ)/tokens.o $(OBJ)/mylanga_fp_t.o $(OBJ)/mylanga_ast.o
+	$(CXX) $(CXXFLAGS) $^ -o $@
 
 .PHONY: clean wipe
 
 clean:
+	rm -f $(OBJ)/*
 	rm -f $(AUTO)/*
 
 wipe:
-	rm -rf $(AUTO)
-	rm -rf $(BIN)
+	rm -rf $(OUTPUT_DIRS)

@@ -21,4 +21,4 @@ function sin(x) {
 function id(x)
   return x
 
-plot (id(x), sin(2*x)) for x=-pi..0.1..pi
+plot (id(x), sin(x)) for x=-pi..0.1..pi

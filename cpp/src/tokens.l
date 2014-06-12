@@ -1,12 +1,12 @@
 %{
 
-#include "mylanga_ast.h"
-#include "mylanga_sem_types.h"
-#define YYSTYPE mylanga_sem_types
-
 #include <string>
 #include <iostream>
 using namespace std;
+
+#include "mylanga_ast.h"
+#include "mylanga_sem_types.h"
+#define YYSTYPE mylanga_sem_types
 
 #include "parser.hpp"
 

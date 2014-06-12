@@ -1,10 +1,13 @@
 #ifndef MYLANGA_AST_H
 #define MYLANGA_AST_H
 
+#include "mylanga_fp_t.h"
 #include "mylanga_ast_meta.h"
 
 #include <string>
 #include <list>
+#include <stack>
+#include <map>
 using namespace std;
 typedef string id;
 
@@ -33,10 +36,6 @@ struct ast_return_stmt;
 struct ast_plot_cmd;
 struct ast_fun_def;
 struct ast_program;
-
-typedef long double fp_t;
-extern const fp_t FP_T_PI;
-fp_t stofp_t(const string& str);
 
 /*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
 
@@ -117,21 +116,22 @@ fp_t stofp_t(const string& str);
 
 struct symbol_table
 {
-  bool fun_is_defined(ptr<id> _id);
-  void define_fun(ptr<id> _id, ptr<list<ptr<id>>> _ids, ptr<ast_block>);
-  ptr<list<ptr<id>>> get_fun_params(ptr<id> _id);
-  void push_scope();
-  void pop_scope();
-  void decl_var(ptr<id> _id);
+  void define_fun(ptr<ast_fun_def> _fd);
+  ptr<ast_fun_def> get_fun_def(ptr<id> _id);
+
+  void open_scope();
+  void close_scope();
+
+  void declare_var(ptr<id> _id);
   bool var_is_declared(ptr<id> _id);
+  void set_var(ptr<id> _id, fp_t value);
+  maybe_fp_t get_var(ptr<id> _id);
+  bool var_is_set(ptr<id> _id);
+
+  map<id,ptr<ast_fun_def>> functions;
+  stack<map<id,fp_t>> scopes;
 };
 
-struct context_data
-{
-  void push_scope();
-  void pop_scope();
-  void set_var(ptr<id> _id, fp_t x);
-};
 
 /*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
 
@@ -139,16 +139,16 @@ struct ast_expr
 {
   virtual ~ast_expr() {}
   virtual bool is_valid(symbol_table& sym) = 0;
-  virtual fp_t eval(symbol_table& sym, context_data& cd) = 0;
+  virtual fp_t eval(symbol_table& sym) = 0;
 };
 
 struct ast_id_expr : ast_expr
 {
   ast_id_expr(ctor_params(ast_id_expr_fields))
     : init_list(ast_id_expr_fields) {}
-  virtual ~ast_id_expr()  {}
-  virtual bool is_valid(symbol_table& sym);
-  virtual fp_t eval(symbol_table& sym, context_data& cd);
+  ~ast_id_expr()  {}
+  bool is_valid(symbol_table& sym);
+  fp_t eval(symbol_table& sym);
 
   field_decls(ast_id_expr_fields);
 };
@@ -157,9 +157,9 @@ struct ast_bin_op_expr : ast_expr
 {
   ast_bin_op_expr(ctor_params(ast_bin_op_expr_fields))
     : init_list(ast_bin_op_expr_fields) {}
-  virtual ~ast_bin_op_expr()  {}
-  virtual bool is_valid(symbol_table& sym);
-  virtual fp_t eval(symbol_table& sym, context_data& cd);
+  ~ast_bin_op_expr()  {}
+  bool is_valid(symbol_table& sym);
+  fp_t eval(symbol_table& sym);
 
   field_decls(ast_bin_op_expr_fields);
 };
@@ -168,9 +168,9 @@ struct ast_uny_op_expr : ast_expr
 {
   ast_uny_op_expr(ctor_params(ast_uny_op_expr_fields))
     : init_list(ast_uny_op_expr_fields) {}
-  virtual ~ast_uny_op_expr()  {}
-  virtual bool is_valid(symbol_table& sym);
-  virtual fp_t eval(symbol_table& sym, context_data& cd);
+  ~ast_uny_op_expr()  {}
+  bool is_valid(symbol_table& sym);
+  fp_t eval(symbol_table& sym);
 
   field_decls(ast_uny_op_expr_fields);
 };
@@ -179,9 +179,9 @@ struct ast_literal : ast_expr
 {
   ast_literal(ctor_params(ast_literal_fields))
     : init_list(ast_literal_fields) {}
-  virtual ~ast_literal() {}
-  virtual bool is_valid(symbol_table& sym);
-  virtual fp_t eval(symbol_table& sym, context_data& cd);
+  ~ast_literal() {}
+  bool is_valid(symbol_table& sym);
+  fp_t eval(symbol_table& sym);
 
   field_decls(ast_literal_fields);
 };
@@ -190,9 +190,9 @@ struct ast_fun_call : ast_expr
 {
   ast_fun_call(ctor_params(ast_fun_call_fields))
     : init_list(ast_fun_call_fields) {}
-  virtual ~ast_fun_call() {}
-  virtual bool is_valid(symbol_table& sym);
-  virtual fp_t eval(symbol_table& sym, context_data& cd);
+  ~ast_fun_call() {}
+  bool is_valid(symbol_table& sym);
+  fp_t eval(symbol_table& sym);
 
   field_decls(ast_fun_call_fields);
 };
@@ -201,16 +201,16 @@ struct ast_pred
 {
   virtual ~ast_pred() {}
   virtual bool is_valid(symbol_table& sym) = 0;
-  virtual bool eval(symbol_table& sym, context_data& cd) = 0;
+  virtual bool eval(symbol_table& sym) = 0;
 };
 
 struct ast_rel_pred : ast_pred
 {
   ast_rel_pred(ctor_params(ast_rel_pred_fields))
     : init_list(ast_rel_pred_fields) {}
-  virtual ~ast_rel_pred() {}
-  virtual bool is_valid(symbol_table& sym);
-  virtual bool eval(symbol_table& sym, context_data& cd);
+  ~ast_rel_pred() {}
+  bool is_valid(symbol_table& sym);
+  bool eval(symbol_table& sym);
 
   field_decls(ast_rel_pred_fields);
 };
@@ -219,9 +219,9 @@ struct ast_bin_l_pred : ast_pred
 {
   ast_bin_l_pred(ctor_params(ast_bin_l_pred_fields))
     : init_list(ast_bin_l_pred_fields) {}
-  virtual ~ast_bin_l_pred() {}
-  virtual bool is_valid(symbol_table& sym);
-  virtual bool eval(symbol_table& sym, context_data& cd);
+  ~ast_bin_l_pred() {}
+  bool is_valid(symbol_table& sym);
+  bool eval(symbol_table& sym);
 
   field_decls(ast_bin_l_pred_fields);
 };
@@ -230,9 +230,9 @@ struct ast_uny_l_pred : ast_pred
 {
   ast_uny_l_pred(ctor_params(ast_uny_l_pred_fields))
     : init_list(ast_uny_l_pred_fields) {}
-  virtual ~ast_uny_l_pred() {}
-  virtual bool is_valid(symbol_table& sym);
-  virtual bool eval(symbol_table& sym, context_data& cd);
+  ~ast_uny_l_pred() {}
+  bool is_valid(symbol_table& sym);
+  bool eval(symbol_table& sym);
 
   field_decls(ast_uny_l_pred_fields);
 };
@@ -241,14 +241,16 @@ struct ast_stmt
 {
   virtual ~ast_stmt() {}
   virtual bool is_valid(symbol_table& sym) = 0;
+  virtual maybe_fp_t exec(symbol_table& sym) = 0;
 };
 
 struct ast_block
 {
   ast_block(ctor_params(ast_block_fields))
     : init_list(ast_block_fields) {}
-  virtual ~ast_block() {}
-  virtual bool is_valid(symbol_table& sym);
+  ~ast_block() {}
+  bool is_valid(symbol_table& sym);
+  maybe_fp_t exec(symbol_table& sym);
 
   field_decls(ast_block_fields);
 };
@@ -257,8 +259,9 @@ struct ast_var_assign_stmt : ast_stmt
 {
   ast_var_assign_stmt(ctor_params(ast_var_assign_stmt_fields))
     : init_list(ast_var_assign_stmt_fields) {}
-  virtual ~ast_var_assign_stmt()  {}
-  virtual bool is_valid(symbol_table& sym);
+  ~ast_var_assign_stmt()  {}
+  bool is_valid(symbol_table& sym);
+  maybe_fp_t exec(symbol_table& sym);
 
   field_decls(ast_var_assign_stmt_fields);
 };
@@ -267,8 +270,9 @@ struct ast_if_then_stmt : ast_stmt
 {
   ast_if_then_stmt(ctor_params(ast_if_then_stmt_fields))
     : init_list(ast_if_then_stmt_fields) {}
-  virtual ~ast_if_then_stmt() {}
-  virtual bool is_valid(symbol_table& sym);
+  ~ast_if_then_stmt() {}
+  bool is_valid(symbol_table& sym);
+  maybe_fp_t exec(symbol_table& sym);
 
   field_decls(ast_if_then_stmt_fields);
 };
@@ -277,8 +281,9 @@ struct ast_if_then_else_stmt : ast_stmt
 {
   ast_if_then_else_stmt(ctor_params(ast_if_then_else_stmt_fields))
     : init_list(ast_if_then_else_stmt_fields) {}
-  virtual ~ast_if_then_else_stmt()  {}
-  virtual bool is_valid(symbol_table& sym);
+  ~ast_if_then_else_stmt()  {}
+  bool is_valid(symbol_table& sym);
+  maybe_fp_t exec(symbol_table& sym);
 
   field_decls(ast_if_then_else_stmt_fields);
 };
@@ -287,8 +292,9 @@ struct ast_while_stmt : ast_stmt
 {
   ast_while_stmt(ctor_params(ast_while_stmt_fields))
     : init_list(ast_while_stmt_fields) {}
-  virtual ~ast_while_stmt() {}
-  virtual bool is_valid(symbol_table& sym);
+  ~ast_while_stmt() {}
+  bool is_valid(symbol_table& sym);
+  maybe_fp_t exec(symbol_table& sym);
 
   field_decls(ast_while_stmt_fields);
 };
@@ -297,8 +303,9 @@ struct ast_return_stmt : ast_stmt
 {
   ast_return_stmt(ctor_params(ast_return_stmt_fields))
     : init_list(ast_return_stmt_fields) {}
-  virtual ~ast_return_stmt()  {}
-  virtual bool is_valid(symbol_table& sym);
+  ~ast_return_stmt()  {}
+  bool is_valid(symbol_table& sym);
+  maybe_fp_t exec(symbol_table& sym);
 
   field_decls(ast_return_stmt_fields);
 };
@@ -307,7 +314,7 @@ struct ast_plot_cmd
 {
   ast_plot_cmd(ctor_params(ast_plot_cmd_fields))
     : init_list(ast_plot_cmd_fields) {}
-  virtual ~ast_plot_cmd() {}
+  ~ast_plot_cmd() {}
   bool is_valid(symbol_table& sym);
   void plot(symbol_table& sym);
 
@@ -318,9 +325,8 @@ struct ast_fun_def
 {
   ast_fun_def(ctor_params(ast_fun_def_fields))
     : init_list(ast_fun_def_fields) {}
-  virtual ~ast_fun_def() {}
+  ~ast_fun_def() {}
   bool is_valid(symbol_table& sym);
-  void load(symbol_table& sym);
 
   field_decls(ast_fun_def_fields);
 };
@@ -329,8 +335,8 @@ struct ast_program
 {
   ast_program(ctor_params(ast_program_fields))
     : init_list(ast_program_fields) {}
-  virtual ~ast_program() {}
-
+  ~ast_program() {}
+  bool is_valid(symbol_table& sym);
   void run();
 
   field_decls(ast_program_fields);

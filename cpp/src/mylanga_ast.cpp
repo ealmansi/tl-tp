@@ -1,223 +1,271 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+#include "mylanga_fp_t.h"
 #include "mylanga_ast.h"
 #include "mylanga_sem_types.h"
 #define YYSTYPE mylanga_sem_types
 
 #include "parser.hpp"
 
-#include <iostream>
-using namespace std;
-
 /*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
 
-const fp_t FP_T_PI = 3.14159265358979323846264338327950288419716939937510L;
-
-fp_t stofp_t(const string& str)
+void symbol_table::define_fun(ptr<ast_fun_def> _fd)
 {
-  return stold(str);
+  functions[*(_fd->_id)] = _fd;
 }
 
-/*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
-
-bool symbol_table::fun_is_defined(ptr<id> _id)
+ptr<ast_fun_def> symbol_table::get_fun_def(ptr<id> _id)
 {
-  // todo
-  return true;
+  return (functions.count(*_id) > 0) ? functions[*_id] : nullptr;
 }
 
-void symbol_table::define_fun(ptr<id> _id, ptr<list<ptr<id>>> _ids, ptr<ast_block>)
+void symbol_table::open_scope()
 {
-  // todo
-  return;
+  scopes.emplace();
 }
 
-ptr<list<ptr<id>>> symbol_table::get_fun_params(ptr<id> _id)
+void symbol_table::close_scope()
 {
-  // todo
-  return mp<list<ptr<id>>>();
+  scopes.pop();
 }
 
-void symbol_table::push_scope()
+void symbol_table::declare_var(ptr<id> _id)
 {
-  // todo
-  return;
-}
-
-void symbol_table::pop_scope()
-{
-  // todo
-  return;
-}
-
-void symbol_table::decl_var(ptr<id> _id)
-{
-  // todo
-  return;
+  set_var(_id, 0.0);
 }
 
 bool symbol_table::var_is_declared(ptr<id> _id)
 {
-  // todo
-  return true;
+  return get_var(_id).is_valid;
+}
+
+void symbol_table::set_var(ptr<id> _id, fp_t value)
+{
+  auto& scope = scopes.top();
+  scope[*_id] = value;
+}
+
+maybe_fp_t symbol_table::get_var(ptr<id> _id)
+{
+  auto& scope = scopes.top();
+  return (scope.count(*_id) > 0) ? maybe_fp_t(scope[*_id]) : maybe_fp_t();
 }
 
 /*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
 
-void context_data::push_scope()
+fp_t ast_id_expr::eval(symbol_table& sym)
 {
-  // todo
-  return;
+  maybe_fp_t var = sym.get_var(_id);
+  
+  if (not var.is_valid)
+  {
+    // error runtime
+    cerr << "error runtime" << endl;
+  }
+
+  return var.value;
 }
 
-void context_data::pop_scope()
+fp_t ast_bin_op_expr::eval(symbol_table& sym)
 {
-  // todo
-  return;
+  switch (_op)
+  {
+    case OP_PLUS: return _ex1->eval(sym) + _ex2->eval(sym);
+    case OP_MINUS: return _ex1->eval(sym) - _ex2->eval(sym);
+    case OP_MULT: return _ex1->eval(sym) * _ex2->eval(sym);
+    case OP_DIV: return _ex1->eval(sym) / _ex2->eval(sym);
+    case OP_EXP: return pow(_ex1->eval(sym), _ex2->eval(sym));
+  }
+  
+  // error inesperado
+  cerr << "error inesperado" << endl;
 }
 
-void context_data::set_var(ptr<id> _id, fp_t x)
+fp_t ast_uny_op_expr::eval(symbol_table& sym)
 {
-  // todo
-  return;
+  switch (_op)
+  {
+    case OP_MINUS: return - _ex->eval(sym);
+  }
+
+  // error inesperado
+  cerr << "error inesperado" << endl;
 }
 
-/*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
-
-fp_t ast_id_expr::eval(symbol_table& sym, context_data& cd)
-{
-  // todo
-  return 0.0;
-}
-
-fp_t ast_bin_op_expr::eval(symbol_table& sym, context_data& cd)
-{
-  // todo
-  return 0.0;
-}
-
-fp_t ast_uny_op_expr::eval(symbol_table& sym, context_data& cd)
-{
-  // todo
-  return 0.0;
-}
-
-fp_t ast_literal::eval(symbol_table& sym, context_data& cd)
+fp_t ast_literal::eval(symbol_table& sym)
 {
   return _vl;
 }
 
-fp_t ast_fun_call::eval(symbol_table& sym, context_data& cd)
+fp_t ast_fun_call::eval(symbol_table& sym)
 {
-  // if (not sym.fun_is_defined(_id))
-  // {
-  //   // error
-  //   return 0.0;
-  // }
+  list<fp_t> args;
+  for (auto _ex : *_exs)
+    args.push_back(_ex->eval(sym));
+
+  sym.open_scope();
+
+  ptr<ast_fun_def> _fd = sym.get_fun_def(_id);
   
-  // ptr<list<ptr<id>>> _ids = sym.get_fun_params(_id);
-  // if (_ids->size() != _exs->size())
-  // {
-  //   // error
-  //   return 0.0;
-  // }
+  auto arg_it = args.begin();
+  for (auto _param_id : *(_fd->_ids))
+    sym.set_var(_param_id, *arg_it++);
 
-  // list<fp_t> args;
-  // for (auto _ex : *_exs)
-  //   args.push_back(_ex->eval(sym, cd));
+  maybe_fp_t ret = _fd->_bl->exec(sym);
 
-  // cd.push_scope();
-  // auto _id_it = _ids->begin();
-  // auto arg_it = args.begin();
-  // for (;_id_it != _ids->end() and arg_it != args.end(); ++_id_it, ++arg_it)
-  //   cd.set_var(*_id_it, *arg_it);
+  sym.close_scope();
 
-  // // ejecuto el block
+  if (not ret.is_valid)
+  {
+    // error runtime
+    cerr << "error runtime" << endl;
+  }
 
-  // cd.pop_scope();
+  return ret.value;
 }
 
 /*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
 
-bool ast_rel_pred::eval(symbol_table& sym, context_data& cd)
+bool ast_rel_pred::eval(symbol_table& sym)
 {
-  // todo
-  return true;
+  switch (_op)
+  {
+    case REL_LT: return _ex1->eval(sym) < _ex2->eval(sym);
+    case REL_LEQ: return _ex1->eval(sym) <= _ex2->eval(sym);
+    case REL_EQ: return _ex1->eval(sym) == _ex2->eval(sym);
+    case REL_GEQ: return _ex1->eval(sym) >= _ex2->eval(sym);
+    case REL_GT: return _ex1->eval(sym) > _ex2->eval(sym);
+  }
+  
+  // error inesperado
+  cerr << "error inesperado" << endl;
 }
 
-bool ast_bin_l_pred::eval(symbol_table& sym, context_data& cd)
+bool ast_bin_l_pred::eval(symbol_table& sym)
 {
-  // todo
-  return true;
+  switch (_op)
+  {
+    case L_OR: return _pr1->eval(sym) or _pr2->eval(sym);
+    case L_AND: return _pr1->eval(sym) and _pr2->eval(sym);
+  }
+  
+  // error inesperado
+  cerr << "error inesperado" << endl;
 }
 
-bool ast_uny_l_pred::eval(symbol_table& sym, context_data& cd)
+bool ast_uny_l_pred::eval(symbol_table& sym)
 {
-  // todo
-  return true;
+  switch (_op)
+  {
+    case L_NOT: return not _pr->eval(sym);
+  }
+  
+  // error inesperado
+  cerr << "error inesperado" << endl;
+}
+
+/*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
+
+maybe_fp_t ast_block::exec(symbol_table& sym)
+{
+  maybe_fp_t ret;
+  for (auto _st : *_sts)
+  {
+    ret = _st->exec(sym);
+    if (ret.is_valid) break;
+  }
+
+  return ret;
+}
+
+maybe_fp_t ast_var_assign_stmt::exec(symbol_table& sym)
+{
+  sym.set_var(_id, _ex->eval(sym));
+
+  return maybe_fp_t();
+}
+
+maybe_fp_t ast_if_then_stmt::exec(symbol_table& sym)
+{
+  maybe_fp_t ret;
+  if (_pr->eval(sym))
+    ret = _bl->exec(sym);
+
+  return ret;
+}
+
+maybe_fp_t ast_if_then_else_stmt::exec(symbol_table& sym)
+{
+  maybe_fp_t ret;
+  if (_pr->eval(sym))
+    ret = _bl1->exec(sym);
+  else
+    ret = _bl2->exec(sym);
+
+  return ret;
+}
+
+maybe_fp_t ast_while_stmt::exec(symbol_table& sym)
+{
+  maybe_fp_t ret;
+  while (_pr->eval(sym))
+  {
+    ret = _bl->exec(sym);
+    if (ret.is_valid) break;
+  }
+
+  return ret;
+}
+
+maybe_fp_t ast_return_stmt::exec(symbol_table& sym)
+{
+  return maybe_fp_t(_ex->eval(sym));
 }
 
 /*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
 
 void ast_plot_cmd::plot(symbol_table& sym)
 {
-  if (this->is_valid(sym))
+  fp_t range_from = _lt1->_vl,
+  range_step = _lt2->_vl,
+  range_to = _lt3->_vl;
+
+  for (fp_t x = range_from; x <= range_to; x += range_step)
   {
-  // fp_t range_from = _lt1->_vl,
-  // range_step = _lt2->_vl,
-  // range_to = _lt3->_vl;
+    sym.open_scope();
+    sym.set_var(_id, x);
 
-  // for (fp_t x = range_from; x <= range_to; x += range_step)
-  // {
-  //   context_data cd;
-  //   cd.push_scope();
-  //   cd.set_var(_id, x);
+    fp_t x_value = _fc1->eval(sym),
+    y_value = _fc2->eval(sym);
 
-  //   fp_t x_value = _fc1->eval(sym, cd),
-  //   y_value = _fc2->eval(sym, cd);
+    cout << x_value << " " << y_value << endl;
 
-  //   // guardar (x_value, y_value)
-
-  //   cd.pop_scope();
-  // }
+    sym.close_scope();
   }
-}
-
-/*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
-
-void ast_fun_def::load(symbol_table& sym)
-{
-  if (this->is_valid(sym))
-    sym.define_fun(_id, _ids, _bl);
-}
-
-/*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
-
-void ast_program::run()
-{
-  symbol_table sym;
-
-  for (auto _fd : *_fds)
-    _fd->load(sym);
-  _pc->plot(sym);
 }
 
 /*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
 
 bool ast_id_expr::is_valid(symbol_table& sym)
 {
+  bool res = true;
   if (not sym.var_is_declared(_id))
   {
-    // error
-    return false;
+    // error semántico
+    cerr << "error semántico" << " " << __PRETTY_FUNCTION__ << endl;
+    res = false;
   }
 
-  return true;
+  return res;
 }
 
 bool ast_bin_op_expr::is_valid(symbol_table& sym)
 {
   bool res = true;
-  res = res and _ex1->is_valid(sym);
-  res = res and _ex2->is_valid(sym);
+  res = _ex1->is_valid(sym) and res;
+  res = _ex2->is_valid(sym) and res;
 
   return res;
 }
@@ -225,7 +273,7 @@ bool ast_bin_op_expr::is_valid(symbol_table& sym)
 bool ast_uny_op_expr::is_valid(symbol_table& sym)
 {
   bool res = true;
-  res = res and _ex->is_valid(sym);
+  res = _ex->is_valid(sym) and res;
 
   return res;
 }
@@ -239,34 +287,35 @@ bool ast_fun_call::is_valid(symbol_table& sym)
 {
   bool res = true;
 
-  if (not sym.fun_is_defined(_id))
+  do
   {
-    // error
-    res = false;
-  }
-  else
-  {
-    ptr<list<ptr<id>>> _ids = sym.get_fun_params(_id);
-    if (_ids->size() != _exs->size())
+    ptr<ast_fun_def> _fd = sym.get_fun_def(_id);
+    if (_fd == nullptr)
     {
-      // error
-      res = false;
+      // error semántico
+      cerr << "error semántico" << " " << __PRETTY_FUNCTION__ << endl;
+      res = false; break;
     }
-  }
+
+    if (_fd->_ids->size() != _exs->size())
+    {
+      // error semántico
+      cerr << "error semántico" << " " << __PRETTY_FUNCTION__ << endl;
+      res = false; break;
+    }
+  } while (false);
   
   for (auto _ex : *_exs)
-    res = res and _ex->is_valid(sym);
+    res = _ex->is_valid(sym) and res;
 
   return res;
 }
 
-/*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
-
 bool ast_rel_pred::is_valid(symbol_table& sym)
 {
   bool res = true;
-  res = res and _ex1->is_valid(sym);
-  res = res and _ex2->is_valid(sym);
+  res = _ex1->is_valid(sym) and res;
+  res = _ex2->is_valid(sym) and res;
 
   return res;
 }
@@ -274,8 +323,8 @@ bool ast_rel_pred::is_valid(symbol_table& sym)
 bool ast_bin_l_pred::is_valid(symbol_table& sym)
 {
   bool res = true;
-  res = res and _pr1->is_valid(sym);
-  res = res and _pr2->is_valid(sym);
+  res = _pr1->is_valid(sym) and res;
+  res = _pr2->is_valid(sym) and res;
 
   return res;
 }
@@ -283,28 +332,27 @@ bool ast_bin_l_pred::is_valid(symbol_table& sym)
 bool ast_uny_l_pred::is_valid(symbol_table& sym)
 {
   bool res = true;
-  res = res and _pr->is_valid(sym);
+  res = _pr->is_valid(sym) and res;
 
   return res;
 }
 
-/*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
-
 bool ast_block::is_valid(symbol_table& sym)
 {
-  sym.push_scope();
   bool res = true;
+
   for (auto _st : *_sts)
-    res = res and _st->is_valid(sym);
-  sym.pop_scope();
+    res = _st->is_valid(sym) and res;
 
   return res;
 }
 
 bool ast_var_assign_stmt::is_valid(symbol_table& sym)
 {
-  bool res = _ex->is_valid(sym);
-  sym.decl_var(_id);
+  bool res = true;
+  res = _ex->is_valid(sym) and res;
+
+  sym.declare_var(_id);
 
   return res;
 }
@@ -312,8 +360,8 @@ bool ast_var_assign_stmt::is_valid(symbol_table& sym)
 bool ast_if_then_stmt::is_valid(symbol_table& sym)
 {
   bool res = true;
-  res = res and _pr->is_valid(sym);
-  res = res and _bl->is_valid(sym);
+  res = _pr->is_valid(sym) and res;
+  res = _bl->is_valid(sym) and res;
 
   return res;
 }
@@ -321,9 +369,9 @@ bool ast_if_then_stmt::is_valid(symbol_table& sym)
 bool ast_if_then_else_stmt::is_valid(symbol_table& sym)
 {
   bool res = true;
-  res = res and _pr->is_valid(sym);
-  res = res and _bl1->is_valid(sym);
-  res = res and _bl2->is_valid(sym);
+  res = _pr->is_valid(sym) and res;
+  res = _bl1->is_valid(sym) and res;
+  res = _bl2->is_valid(sym) and res;
   
   return res;
 }
@@ -331,8 +379,8 @@ bool ast_if_then_else_stmt::is_valid(symbol_table& sym)
 bool ast_while_stmt::is_valid(symbol_table& sym)
 {
   bool res = true;
-  res = res and _pr->is_valid(sym);
-  res = res and _bl->is_valid(sym);
+  res = _pr->is_valid(sym) and res;
+  res = _bl->is_valid(sym) and res;
 
   return res;
 }
@@ -340,29 +388,67 @@ bool ast_while_stmt::is_valid(symbol_table& sym)
 bool ast_return_stmt::is_valid(symbol_table& sym)
 {
   bool res = true;
-  res = res and _ex->is_valid(sym);
+  res = _ex->is_valid(sym) and res;
 
   return res;
 }
 
-/*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
-
 bool ast_plot_cmd::is_valid(symbol_table& sym)
 {
+  bool res = true;
+
   fp_t range_from = _lt1->_vl,
   range_step = _lt2->_vl,
   range_to = _lt3->_vl;
 
   if (not (range_from <= range_to and 0 < range_step))
   {
-    // error
-    return false;
+    // error semántico
+    cerr << "error semántico" << " " << __PRETTY_FUNCTION__ << endl;
+    res = false;
   }
 
-  return true;
+  sym.open_scope();
+  sym.declare_var(_id);
+
+  res = _fc1->is_valid(sym) and res;
+  res = _fc2->is_valid(sym) and res;
+
+  sym.close_scope();
+
+  return res;
 }
 
-/*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
+bool has_repeated_elements(ptr<list<ptr<id>>> _ids);
+bool ast_fun_def::is_valid(symbol_table& sym)
+{
+  bool res = true;
+
+  if (sym.get_fun_def(_id) != nullptr)
+  {
+    // error semántico
+    cerr << "error semántico" << " " << __PRETTY_FUNCTION__ << endl;
+    res = false;
+  }
+
+  if (has_repeated_elements(_ids))
+  {
+    // error semántico
+    cerr << "error semántico" << " " << __PRETTY_FUNCTION__ << endl;
+    res = false;
+  }
+
+  sym.open_scope();
+
+  for (auto _id : *_ids)
+    sym.declare_var(_id);
+
+  res = _bl->is_valid(sym) and res;
+
+  sym.close_scope();
+
+  return res;
+}
 
 bool has_repeated_elements(ptr<list<ptr<id>>> _ids)
 {
@@ -373,25 +459,25 @@ bool has_repeated_elements(ptr<list<ptr<id>>> _ids)
   return false;
 }
 
-bool ast_fun_def::is_valid(symbol_table& sym)
+/*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
+
+void ast_program::run()
 {
-  if (sym.fun_is_defined(_id))
+  symbol_table sym;
+
+  bool fds_are_valid = true;
+  for (auto _fd : *_fds)
   {
-    // error
-    return false;
+    if (not (_fd->is_valid(sym)))
+    {
+      fds_are_valid = false;
+      continue;
+    }
+    
+    sym.define_fun(_fd);
   }
 
-  if (has_repeated_elements(_ids))
-  {
-    // error
-    return false;
-  }
-
-  sym.push_scope();
-  for (auto _id : *_ids)
-    sym.decl_var(_id);
-  bool res =_bl->is_valid(sym);
-  sym.pop_scope();
-
-  return res;
+  if (_pc->is_valid(sym) and fds_are_valid)
+    _pc->plot(sym);
 }
+

@@ -70,6 +70,7 @@
 #include <iostream>
 using namespace std;
 
+#include "mylanga_fp_t.h"
 #include "mylanga_ast.h"
 #include "mylanga_sem_types.h"
 #define YYSTYPE mylanga_sem_types
@@ -81,7 +82,7 @@ extern ptr<ast_program> pg;
 
 
 /* Line 371 of yacc.c  */
-#line 85 "src/auto/parser.cpp"
+#line 86 "src/auto/parser.cpp"
 
 # ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -181,7 +182,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 185 "src/auto/parser.cpp"
+#line 186 "src/auto/parser.cpp"
 
 #ifdef short
 # undef short
@@ -500,11 +501,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    74,    74,    78,    83,    89,    90,    94,    95,    96,
-      97,    98,   102,   103,   104,   105,   106,   107,   108,   109,
-     110,   111,   115,   116,   117,   118,   119,   120,   121,   122,
-     123,   127,   128,   129,   133,   134,   138,   142,   143,   147,
-     148,   152,   153,   157,   158,   162,   163,   167,   168
+       0,    75,    75,    79,    84,    90,    91,    95,    96,    97,
+      98,    99,   103,   104,   105,   106,   107,   108,   109,   110,
+     111,   112,   116,   117,   118,   119,   120,   121,   122,   123,
+     124,   128,   129,   130,   134,   135,   139,   143,   144,   148,
+     149,   153,   154,   158,   159,   163,   164,   168,   169
 };
 #endif
 
@@ -1462,289 +1463,289 @@ yyreduce:
     {
         case 2:
 /* Line 1787 of yacc.c  */
-#line 74 "src/parser.y"
+#line 75 "src/parser.y"
     { pg = (yyval._pg) = mp<ast_program>((yyvsp[(1) - (2)]._fds), (yyvsp[(2) - (2)]._pc)); }
     break;
 
   case 3:
 /* Line 1787 of yacc.c  */
-#line 79 "src/parser.y"
+#line 80 "src/parser.y"
     { (yyval._fd) = mp<ast_fun_def>((yyvsp[(2) - (6)]._id), (yyvsp[(4) - (6)]._ids), (yyvsp[(6) - (6)]._bl)); }
     break;
 
   case 4:
 /* Line 1787 of yacc.c  */
-#line 85 "src/parser.y"
+#line 86 "src/parser.y"
     { (yyval._pc) = mp<ast_plot_cmd>((yyvsp[(3) - (14)]._fc), (yyvsp[(5) - (14)]._fc), (yyvsp[(8) - (14)]._id), (yyvsp[(10) - (14)]._lt), (yyvsp[(12) - (14)]._lt), (yyvsp[(14) - (14)]._lt)); }
     break;
 
   case 5:
 /* Line 1787 of yacc.c  */
-#line 89 "src/parser.y"
+#line 90 "src/parser.y"
     { (yyval._bl) = mp<ast_block>(mp<list<ptr<ast_stmt>>>(1, (yyvsp[(1) - (1)]._st))); }
     break;
 
   case 6:
 /* Line 1787 of yacc.c  */
-#line 90 "src/parser.y"
+#line 91 "src/parser.y"
     { (yyval._bl) = mp<ast_block>((yyvsp[(2) - (3)]._sts)); }
     break;
 
   case 7:
 /* Line 1787 of yacc.c  */
-#line 94 "src/parser.y"
+#line 95 "src/parser.y"
     { (yyval._st) = mp<ast_var_assign_stmt>((yyvsp[(1) - (3)]._id), (yyvsp[(3) - (3)]._ex)); }
     break;
 
   case 8:
 /* Line 1787 of yacc.c  */
-#line 95 "src/parser.y"
+#line 96 "src/parser.y"
     { (yyval._st) = mp<ast_if_then_stmt>((yyvsp[(2) - (4)]._pr), (yyvsp[(4) - (4)]._bl)); }
     break;
 
   case 9:
 /* Line 1787 of yacc.c  */
-#line 96 "src/parser.y"
+#line 97 "src/parser.y"
     { (yyval._st) = mp<ast_if_then_else_stmt>((yyvsp[(2) - (6)]._pr), (yyvsp[(4) - (6)]._bl), (yyvsp[(6) - (6)]._bl)); }
     break;
 
   case 10:
 /* Line 1787 of yacc.c  */
-#line 97 "src/parser.y"
+#line 98 "src/parser.y"
     { (yyval._st) = mp<ast_while_stmt>((yyvsp[(2) - (3)]._pr), (yyvsp[(3) - (3)]._bl)); }
     break;
 
   case 11:
 /* Line 1787 of yacc.c  */
-#line 98 "src/parser.y"
+#line 99 "src/parser.y"
     { (yyval._st) = mp<ast_return_stmt>((yyvsp[(2) - (2)]._ex)); }
     break;
 
   case 12:
 /* Line 1787 of yacc.c  */
-#line 102 "src/parser.y"
+#line 103 "src/parser.y"
     { (yyval._ex) = (yyvsp[(1) - (1)]._lt); }
     break;
 
   case 13:
 /* Line 1787 of yacc.c  */
-#line 103 "src/parser.y"
+#line 104 "src/parser.y"
     { (yyval._ex) = mp<ast_id_expr>((yyvsp[(1) - (1)]._id)); }
     break;
 
   case 14:
 /* Line 1787 of yacc.c  */
-#line 104 "src/parser.y"
+#line 105 "src/parser.y"
     { (yyval._ex) = (yyvsp[(1) - (1)]._fc); }
     break;
 
   case 15:
 /* Line 1787 of yacc.c  */
-#line 105 "src/parser.y"
+#line 106 "src/parser.y"
     { (yyval._ex) = mp<ast_bin_op_expr>((yyvsp[(1) - (3)]._ex), (yyvsp[(2) - (3)]._int), (yyvsp[(3) - (3)]._ex)); }
     break;
 
   case 16:
 /* Line 1787 of yacc.c  */
-#line 106 "src/parser.y"
+#line 107 "src/parser.y"
     { (yyval._ex) = mp<ast_bin_op_expr>((yyvsp[(1) - (3)]._ex), (yyvsp[(2) - (3)]._int), (yyvsp[(3) - (3)]._ex)); }
     break;
 
   case 17:
 /* Line 1787 of yacc.c  */
-#line 107 "src/parser.y"
+#line 108 "src/parser.y"
     { (yyval._ex) = mp<ast_bin_op_expr>((yyvsp[(1) - (3)]._ex), (yyvsp[(2) - (3)]._int), (yyvsp[(3) - (3)]._ex)); }
     break;
 
   case 18:
 /* Line 1787 of yacc.c  */
-#line 108 "src/parser.y"
+#line 109 "src/parser.y"
     { (yyval._ex) = mp<ast_bin_op_expr>((yyvsp[(1) - (3)]._ex), (yyvsp[(2) - (3)]._int), (yyvsp[(3) - (3)]._ex)); }
     break;
 
   case 19:
 /* Line 1787 of yacc.c  */
-#line 109 "src/parser.y"
+#line 110 "src/parser.y"
     { (yyval._ex) = mp<ast_uny_op_expr>((yyvsp[(1) - (2)]._int), (yyvsp[(2) - (2)]._ex)); }
     break;
 
   case 20:
 /* Line 1787 of yacc.c  */
-#line 110 "src/parser.y"
+#line 111 "src/parser.y"
     { (yyval._ex) = mp<ast_bin_op_expr>((yyvsp[(1) - (3)]._ex), (yyvsp[(2) - (3)]._int), (yyvsp[(3) - (3)]._ex)); }
     break;
 
   case 21:
 /* Line 1787 of yacc.c  */
-#line 111 "src/parser.y"
+#line 112 "src/parser.y"
     { (yyval._ex) = (yyvsp[(2) - (3)]._ex); }
     break;
 
   case 22:
 /* Line 1787 of yacc.c  */
-#line 115 "src/parser.y"
+#line 116 "src/parser.y"
     { (yyval._pr) = mp<ast_rel_pred>((yyvsp[(1) - (3)]._ex), (yyvsp[(2) - (3)]._int), (yyvsp[(3) - (3)]._ex)); }
     break;
 
   case 23:
 /* Line 1787 of yacc.c  */
-#line 116 "src/parser.y"
+#line 117 "src/parser.y"
     { (yyval._pr) = mp<ast_rel_pred>((yyvsp[(1) - (3)]._ex), (yyvsp[(2) - (3)]._int), (yyvsp[(3) - (3)]._ex)); }
     break;
 
   case 24:
 /* Line 1787 of yacc.c  */
-#line 117 "src/parser.y"
+#line 118 "src/parser.y"
     { (yyval._pr) = mp<ast_rel_pred>((yyvsp[(1) - (3)]._ex), (yyvsp[(2) - (3)]._int), (yyvsp[(3) - (3)]._ex)); }
     break;
 
   case 25:
 /* Line 1787 of yacc.c  */
-#line 118 "src/parser.y"
+#line 119 "src/parser.y"
     { (yyval._pr) = mp<ast_rel_pred>((yyvsp[(1) - (3)]._ex), (yyvsp[(2) - (3)]._int), (yyvsp[(3) - (3)]._ex)); }
     break;
 
   case 26:
 /* Line 1787 of yacc.c  */
-#line 119 "src/parser.y"
+#line 120 "src/parser.y"
     { (yyval._pr) = mp<ast_rel_pred>((yyvsp[(1) - (3)]._ex), (yyvsp[(2) - (3)]._int), (yyvsp[(3) - (3)]._ex)); }
     break;
 
   case 27:
 /* Line 1787 of yacc.c  */
-#line 120 "src/parser.y"
+#line 121 "src/parser.y"
     { (yyval._pr) = mp<ast_bin_l_pred>((yyvsp[(1) - (3)]._pr), (yyvsp[(2) - (3)]._int), (yyvsp[(3) - (3)]._pr)); }
     break;
 
   case 28:
 /* Line 1787 of yacc.c  */
-#line 121 "src/parser.y"
+#line 122 "src/parser.y"
     { (yyval._pr) = mp<ast_bin_l_pred>((yyvsp[(1) - (3)]._pr), (yyvsp[(2) - (3)]._int), (yyvsp[(3) - (3)]._pr)); }
     break;
 
   case 29:
 /* Line 1787 of yacc.c  */
-#line 122 "src/parser.y"
+#line 123 "src/parser.y"
     { (yyval._pr) = mp<ast_uny_l_pred>((yyvsp[(1) - (2)]._int), (yyvsp[(2) - (2)]._pr)); }
     break;
 
   case 30:
 /* Line 1787 of yacc.c  */
-#line 123 "src/parser.y"
+#line 124 "src/parser.y"
     { (yyval._pr) = (yyvsp[(2) - (3)]._pr); }
     break;
 
   case 31:
 /* Line 1787 of yacc.c  */
-#line 127 "src/parser.y"
+#line 128 "src/parser.y"
     { (yyval._lt) = mp<ast_literal>(stofp_t(*(yyvsp[(1) - (1)]._str))); }
     break;
 
   case 32:
 /* Line 1787 of yacc.c  */
-#line 128 "src/parser.y"
+#line 129 "src/parser.y"
     { (yyval._lt) = mp<ast_literal>(stofp_t(*(yyvsp[(1) - (1)]._str))); }
     break;
 
   case 33:
 /* Line 1787 of yacc.c  */
-#line 129 "src/parser.y"
+#line 130 "src/parser.y"
     { (yyval._lt) = mp<ast_literal>(FP_T_PI); }
     break;
 
   case 34:
 /* Line 1787 of yacc.c  */
-#line 133 "src/parser.y"
+#line 134 "src/parser.y"
     { (yyval._lt) = (yyvsp[(1) - (1)]._lt); }
     break;
 
   case 35:
 /* Line 1787 of yacc.c  */
-#line 134 "src/parser.y"
+#line 135 "src/parser.y"
     { (yyval._lt) = mp<ast_literal>(-(yyvsp[(2) - (2)]._lt)->_vl); }
     break;
 
   case 36:
 /* Line 1787 of yacc.c  */
-#line 138 "src/parser.y"
+#line 139 "src/parser.y"
     { (yyval._fc) = mp<ast_fun_call>((yyvsp[(1) - (4)]._id), (yyvsp[(3) - (4)]._exs)); }
     break;
 
   case 37:
 /* Line 1787 of yacc.c  */
-#line 142 "src/parser.y"
+#line 143 "src/parser.y"
     { (yyval._fds) = mp<list<ptr<ast_fun_def>>>(1, (yyvsp[(1) - (1)]._fd)); }
     break;
 
   case 38:
 /* Line 1787 of yacc.c  */
-#line 143 "src/parser.y"
+#line 144 "src/parser.y"
     { (yyval._fds) = (yyvsp[(1) - (2)]._fds); (yyval._fds)->push_back((yyvsp[(2) - (2)]._fd)); }
     break;
 
   case 39:
 /* Line 1787 of yacc.c  */
-#line 147 "src/parser.y"
+#line 148 "src/parser.y"
     { (yyval._sts) = mp<list<ptr<ast_stmt>>>(1, (yyvsp[(1) - (1)]._st)); }
     break;
 
   case 40:
 /* Line 1787 of yacc.c  */
-#line 148 "src/parser.y"
+#line 149 "src/parser.y"
     { (yyval._sts) = (yyvsp[(1) - (2)]._sts); (yyval._sts)->push_back((yyvsp[(2) - (2)]._st)); }
     break;
 
   case 41:
 /* Line 1787 of yacc.c  */
-#line 152 "src/parser.y"
+#line 153 "src/parser.y"
     { (yyval._ids) = mp<list<ptr<id>>>(); }
     break;
 
   case 42:
 /* Line 1787 of yacc.c  */
-#line 153 "src/parser.y"
+#line 154 "src/parser.y"
     { (yyval._ids) = (yyvsp[(1) - (1)]._ids); }
     break;
 
   case 43:
 /* Line 1787 of yacc.c  */
-#line 157 "src/parser.y"
+#line 158 "src/parser.y"
     { (yyval._ids) = mp<list<ptr<id>>>(1, (yyvsp[(1) - (1)]._id)); }
     break;
 
   case 44:
 /* Line 1787 of yacc.c  */
-#line 158 "src/parser.y"
+#line 159 "src/parser.y"
     { (yyval._ids) = (yyvsp[(1) - (3)]._ids); (yyval._ids)->push_back((yyvsp[(3) - (3)]._id)); }
     break;
 
   case 45:
 /* Line 1787 of yacc.c  */
-#line 162 "src/parser.y"
+#line 163 "src/parser.y"
     { (yyval._exs) = mp<list<ptr<ast_expr>>>(); }
     break;
 
   case 46:
 /* Line 1787 of yacc.c  */
-#line 163 "src/parser.y"
+#line 164 "src/parser.y"
     { (yyval._exs) = (yyvsp[(1) - (1)]._exs); }
     break;
 
   case 47:
 /* Line 1787 of yacc.c  */
-#line 167 "src/parser.y"
+#line 168 "src/parser.y"
     { (yyval._exs) = mp<list<ptr<ast_expr>>>(1, (yyvsp[(1) - (1)]._ex)); }
     break;
 
   case 48:
 /* Line 1787 of yacc.c  */
-#line 168 "src/parser.y"
+#line 169 "src/parser.y"
     { (yyval._exs) = (yyvsp[(1) - (3)]._exs); (yyval._exs)->push_back((yyvsp[(3) - (3)]._ex)); }
     break;
 
 
 /* Line 1787 of yacc.c  */
-#line 1748 "src/auto/parser.cpp"
+#line 1749 "src/auto/parser.cpp"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1976,4 +1977,4 @@ yyreturn:
 
 
 /* Line 2050 of yacc.c  */
-#line 171 "src/parser.y"
+#line 172 "src/parser.y"

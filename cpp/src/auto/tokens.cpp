@@ -512,13 +512,13 @@ char *yytext;
 #line 1 "src/tokens.l"
 #line 2 "src/tokens.l"
 
-#include "mylanga_ast.h"
-#include "mylanga_sem_types.h"
-#define YYSTYPE mylanga_sem_types
-
 #include <string>
 #include <iostream>
 using namespace std;
+
+#include "mylanga_ast.h"
+#include "mylanga_sem_types.h"
+#define YYSTYPE mylanga_sem_types
 
 #include "parser.hpp"
 
