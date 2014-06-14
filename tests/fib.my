@@ -6,18 +6,12 @@ function fib(n) {
   fib_n_1 = 0
   fib_n = 1
   while n > 0 {
-    temp = fib_n
-    fib_n = fib_n + fib_n_1
+    temp = 
+    fib_n = fib_n + fib_n_1 -
     fib_n_1 = temp
     n = n - 1
   }
   return fib_n
 }
 
-function fib(n,n)
-  return n
-
-function id(n)
-  return n
-
-plot (id(n,n), fib(k)) for n = 0..1..-1
+plot (n, fib(n)) for n = 0..1..20

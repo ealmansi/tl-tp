@@ -79,7 +79,7 @@ fp_t ast_id_expr::eval(symbol_table& sym)
   {
     // runtime error
     cerr << MYLANGA_RUNTIME_ERROR << " | " << \
-      "Lectura de la variable " << *_id << " sin haberle asignado previamente un valor." << endl;
+      "Lectura de la variable \'" << *_id << "\' sin haberle asignado previamente un valor." << endl;
     MYLANGA_END_ABRUPTLY();
   }
 
@@ -132,7 +132,7 @@ fp_t ast_fun_call_expr::eval(symbol_table& sym)
   {
     // runtime error
     cerr << MYLANGA_RUNTIME_ERROR << " | " << \
-      "La función " << *_id << " se ejecutó sin retornar un valor." << endl;
+      "La función \'" << *_id << "\' se ejecutó sin retornar un valor." << endl;
     MYLANGA_END_ABRUPTLY();
   }
 
@@ -270,8 +270,8 @@ bool ast_id_expr::is_valid(symbol_table& sym)
   bool res = true;
   if (not sym.var_is_declared(_id))
   {
-    cerr << MYLANGA_PARSE_ERROR << " | " << \
-      "La variable " << *_id << " no se encuentra previamente declarada." << endl;
+    cerr << MYLANGA_PARSE_ERROR(_ln) << " | " << \
+      "La variable \'" << *_id << "\' no se encuentra previamente declarada." << endl;
     res = false;
   }
 
@@ -304,14 +304,14 @@ bool ast_fun_call_expr::is_valid(symbol_table& sym)
     ptr<ast_fun_def> _fd = sym.get_fun_def(_id);
     if (_fd == nullptr)
     {
-      cerr << MYLANGA_PARSE_ERROR << " | " << \
-        "La función " << *_id << " no se encuentra definida." << endl;
+      cerr << MYLANGA_PARSE_ERROR(_ln) << " | " << \
+        "La función \'" << *_id << "\' no se encuentra definida." << endl;
       res = false; break;
     }
 
     if (_fd->_ids->size() != _exs->size())
     {
-      cerr << MYLANGA_PARSE_ERROR << " | " << \
+      cerr << MYLANGA_PARSE_ERROR(_ln) << " | " << \
         "La función " << (*(_fd->_id)) << " recibe " << to_string(_fd->_ids->size()) << \
         " parámetro(s), pero es invocada con " <<  to_string(_exs->size()) << \
         " argumento(s)." << endl;
@@ -426,7 +426,7 @@ bool ast_plot_cmd::is_valid(symbol_table& sym)
 
     if (not (range_from <= range_to and 0 < range_step))
     {
-      cerr << MYLANGA_PARSE_ERROR << " | " << \
+      cerr << MYLANGA_PARSE_ERROR(_ln) << " | " << \
         "El rango del comando plot es inválido; un rango válido a..d..b debe cumplir a <= b y 0 < d." << endl;
       res = false;
     }
@@ -450,15 +450,15 @@ bool ast_fun_def::is_valid(symbol_table& sym)
 
   if (sym.get_fun_def(_id) != nullptr)
   {
-    cerr << MYLANGA_PARSE_ERROR << " | " << \
-      "La función " << *_id << " ya está definida." << endl;
+    cerr << MYLANGA_PARSE_ERROR(_ln) << " | " << \
+      "La función \'" << *_id << "\' ya está definida." << endl;
     res = false;
   }
 
   if (has_repeated_elements(_ids))
   {
-    cerr << MYLANGA_PARSE_ERROR << " | " << \
-      "La función " << *_id << " contiene parámetros repetidos en su definición." << endl;
+    cerr << MYLANGA_PARSE_ERROR(_ln) << " | " << \
+      "La función \'" << *_id << "\' contiene parámetros repetidos en su definición." << endl;
     res = false;
   }
 

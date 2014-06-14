@@ -72,102 +72,102 @@ void yyerror(const char *s) { cerr << MYLANGA_SYNTAX_ERROR(line_num) << endl; }
 %%
 
 program
-  : seq_fun_def plot_cmd          { pg = $$ = mp<ast_program>($1, $2); }
+  : seq_fun_def plot_cmd          { pg = $$ = mp<ast_program>($1, $2, line_num); }
 
   // error handling
-  | seq_fun_def                   { pg = $$ = mp<ast_program>($1, mp<ast_syntax_error>("program: seq_fun_def", line_num)); }
-  | plot_cmd                      { pg = $$ = mp<ast_program>(mp<list<ptr<ast_fun_def>>>(1, mp<ast_syntax_error>("program: plot_cmd", line_num)), $1); }
-  | /* */                         { pg = $$ = mp<ast_program>(mp<list<ptr<ast_fun_def>>>(1, mp<ast_syntax_error>("program: /* */", line_num)), mp<ast_syntax_error>("program: /* */", line_num)); }
+  | seq_fun_def                   { pg = $$ = mp<ast_program>($1, mp<ast_syntax_error>("Falta definir la instrucción de plot.", line_num), line_num); }
+  | plot_cmd                      { pg = $$ = mp<ast_program>(mp<list<ptr<ast_fun_def>>>(1, mp<ast_syntax_error>("No se definió ninguna función.", line_num)), $1, line_num); }
+  | /* */                         { pg = $$ = mp<ast_program>(mp<list<ptr<ast_fun_def>>>(1, mp<ast_syntax_error>("No se definió ninguna función.", line_num)), mp<ast_syntax_error>("Falta definir la instrucción de plot.", line_num), line_num); }
   ;
 
 fun_def
   : KW_FUNCTION ID LPAREN lst_id RPAREN block
-                                  { $$ = mp<ast_fun_def>($2, $4, $6); }
+                                  { $$ = mp<ast_fun_def>($2, $4, $6, line_num); }
 
   // error handling
   | KW_FUNCTION ID LPAREN lst_id RPAREN /* */
-                                  { $$ = mp<ast_syntax_error>("fun_def: KW_FUNCTION ID LPAREN lst_id RPAREN /* */", line_num); }
+                                  { $$ = mp<ast_syntax_error>("La definición de la función \'" + *$2 + "\' está incompleta.", line_num); }
   ;
 
 plot_cmd
   : KW_PLOT LPAREN expr COMMA expr RPAREN
     KW_FOR ID EQUAL expr ELLIPSIS expr ELLIPSIS expr
-                                  { $$ = mp<ast_plot_cmd>($3, $5, $8, $10, $12, $14); }
+                                  { $$ = mp<ast_plot_cmd>($3, $5, $8, $10, $12, $14, line_num); }
 
   // error handling
   | KW_PLOT LPAREN expr COMMA expr RPAREN /* */
-                                  { $$ = mp<ast_syntax_error>("plot_cmd: KW_PLOT LPAREN expr COMMA expr RPAREN /* */", line_num); }  
+                                  { $$ = mp<ast_syntax_error>("Falta definir el rango de la instrucción de plot.", line_num); }  
   ;
 
 block
-  : stmt                          { $$ = mp<ast_block>(mp<list<ptr<ast_stmt>>>(1, $1)); }
-  | LBRACE seq_stmt RBRACE        { $$ = mp<ast_block>($2); }
+  : stmt                          { $$ = mp<ast_block>(mp<list<ptr<ast_stmt>>>(1, $1), line_num); }
+  | LBRACE seq_stmt RBRACE        { $$ = mp<ast_block>($2, line_num); }
 
   // error handling
-  | LBRACE RBRACE                 { $$ = mp<ast_syntax_error>("block: LBRACE RBRACE", line_num); }
+  | LBRACE RBRACE                 { $$ = mp<ast_syntax_error>("Un bloque de instrucciones no puede ser vacío.", line_num); }
   ;
 
 stmt
-  : ID EQUAL expr                             { $$ = mp<ast_var_assign_stmt>($1, $3); }
-  | KW_IF pred KW_THEN block                  { $$ = mp<ast_if_then_stmt>($2, $4); }
-  | KW_IF pred KW_THEN block KW_ELSE block    { $$ = mp<ast_if_then_else_stmt>($2, $4, $6); }
-  | KW_WHILE pred block                       { $$ = mp<ast_while_stmt>($2, $3); }
-  | KW_RETURN expr                            { $$ = mp<ast_return_stmt>($2); }
+  : ID EQUAL expr                             { $$ = mp<ast_var_assign_stmt>($1, $3, line_num); }
+  | KW_IF pred KW_THEN block                  { $$ = mp<ast_if_then_stmt>($2, $4, line_num); }
+  | KW_IF pred KW_THEN block KW_ELSE block    { $$ = mp<ast_if_then_else_stmt>($2, $4, $6, line_num); }
+  | KW_WHILE pred block                       { $$ = mp<ast_while_stmt>($2, $3, line_num); }
+  | KW_RETURN expr                            { $$ = mp<ast_return_stmt>($2, line_num); }
 
   // error handling
-  | error EQUAL expr                                { $$ = mp<ast_syntax_error>("stmt: error EQUAL expr", line_num); }
-  | ID EQUAL error                                  { $$ = mp<ast_syntax_error>("stmt: ID EQUAL error", line_num); }
-  | KW_IF expr { temp = line_num; } KW_THEN block   { $$ = mp<ast_syntax_error>("stmt: KW_IF expr KW_THEN block", temp); }
-  | KW_WHILE expr { temp = line_num; } block        { $$ = mp<ast_syntax_error>("stmt: KW_WHILE expr block", temp); }
-  | KW_IF pred { temp = line_num; } block           { $$ = mp<ast_syntax_error>("stmt: KW_IF pred block", temp); }
-  | KW_IF error                                     { $$ = mp<ast_syntax_error>("stmt: KW_IF error", line_num); }
-  | KW_WHILE error                                  { $$ = mp<ast_syntax_error>("stmt: KW_WHILE error", line_num); }
-  | KW_RETURN error                                 { $$ = mp<ast_syntax_error>("stmt: KW_RETURN error", line_num); }
+  | error EQUAL expr                                { $$ = mp<ast_syntax_error>("Instrucción de asignación inválida.", line_num); }
+  | ID EQUAL error                                  { $$ = mp<ast_syntax_error>("La expresión de lado derecho de la asignación es inválida.", line_num); }
+  | KW_IF expr { temp = line_num; } KW_THEN block   { $$ = mp<ast_syntax_error>("La guarda de un if debe ser un predicado con valor booleano.", temp); }
+  | KW_WHILE expr { temp = line_num; } block        { $$ = mp<ast_syntax_error>("La guarda de un while debe ser un predicado con valor booleano.", temp); }
+  | KW_IF pred { temp = line_num; } block           { $$ = mp<ast_syntax_error>("Falta la palabra clave 'then' en la instrucción if.", temp); }
+  | KW_IF error                                     { $$ = mp<ast_syntax_error>("La guarda del if es inválida.", line_num); }
+  | KW_WHILE error                                  { $$ = mp<ast_syntax_error>("La guarda del while es inválida.", line_num); }
+  | KW_RETURN error                                 { $$ = mp<ast_syntax_error>("La expresión de retorno es inválida.", line_num); }
   ;
 
 expr
-  : INT_LITERAL                   { $$ = mp<ast_literal_expr>(stofp_t(*$1)); }
-  | FP_LITERAL                    { $$ = mp<ast_literal_expr>(stofp_t(*$1)); }
-  | KW_PI                         { $$ = mp<ast_literal_expr>(FP_T_PI); }
-  | ID                            { $$ = mp<ast_id_expr>($1); }
-  | expr OP_PLUS expr             { $$ = mp<ast_bin_op_expr>($1, $2, $3); }
-  | expr OP_MINUS expr            { $$ = mp<ast_bin_op_expr>($1, $2, $3); }
-  | expr OP_MULT expr             { $$ = mp<ast_bin_op_expr>($1, $2, $3); }
-  | expr OP_DIV expr              { $$ = mp<ast_bin_op_expr>($1, $2, $3); }
-  | OP_MINUS expr %prec UMINUS    { $$ = mp<ast_uny_op_expr>($1, $2); }
-  | expr OP_EXP expr              { $$ = mp<ast_bin_op_expr>($1, $2, $3); }
-  | ID LPAREN lst_expr RPAREN     { $$ = mp<ast_fun_call_expr>($1, $3); }
+  : INT_LITERAL                   { $$ = mp<ast_literal_expr>(stofp_t(*$1), line_num); }
+  | FP_LITERAL                    { $$ = mp<ast_literal_expr>(stofp_t(*$1), line_num); }
+  | KW_PI                         { $$ = mp<ast_literal_expr>(FP_T_PI, line_num); }
+  | ID                            { $$ = mp<ast_id_expr>($1, line_num); }
+  | expr OP_PLUS expr             { $$ = mp<ast_bin_op_expr>($1, $2, $3, line_num); }
+  | expr OP_MINUS expr            { $$ = mp<ast_bin_op_expr>($1, $2, $3, line_num); }
+  | expr OP_MULT expr             { $$ = mp<ast_bin_op_expr>($1, $2, $3, line_num); }
+  | expr OP_DIV expr              { $$ = mp<ast_bin_op_expr>($1, $2, $3, line_num); }
+  | OP_MINUS expr %prec UMINUS    { $$ = mp<ast_uny_op_expr>($1, $2, line_num); }
+  | expr OP_EXP expr              { $$ = mp<ast_bin_op_expr>($1, $2, $3, line_num); }
+  | ID LPAREN lst_expr RPAREN     { $$ = mp<ast_fun_call_expr>($1, $3, line_num); }
   | LPAREN expr RPAREN            { $$ = $2; }
 
   // error handling
-  | expr OP_PLUS error             { $$ = mp<ast_syntax_error>("expr: expr OP_PLUS error", line_num); }
-  | expr OP_MINUS error            { $$ = mp<ast_syntax_error>("expr: expr OP_MINUS error", line_num); }
-  | expr OP_MULT error             { $$ = mp<ast_syntax_error>("expr: expr OP_MULT error", line_num); }
-  | expr OP_DIV error              { $$ = mp<ast_syntax_error>("expr: expr OP_DIV error", line_num); }
-  | expr OP_EXP error              { $$ = mp<ast_syntax_error>("expr: expr OP_EXP error", line_num); }
-  | LPAREN error RPAREN            { $$ = mp<ast_syntax_error>("expr: LPAREN error RPAREN", line_num); }
+  | expr OP_PLUS error             { $$ = mp<ast_syntax_error>("Expresión inválida.", line_num); }
+  | expr OP_MINUS error            { $$ = mp<ast_syntax_error>("Expresión inválida.", line_num); }
+  | expr OP_MULT error             { $$ = mp<ast_syntax_error>("Expresión inválida.", line_num); }
+  | expr OP_DIV error              { $$ = mp<ast_syntax_error>("Expresión inválida.", line_num); }
+  | expr OP_EXP error              { $$ = mp<ast_syntax_error>("Expresión inválida.", line_num); }
+  | LPAREN error RPAREN            { $$ = mp<ast_syntax_error>("Expresión inválida.", line_num); }
   ;
 
 pred
-  : expr REL_LT expr              { $$ = mp<ast_rel_pred>($1, $2, $3); }
-  | expr REL_LEQ expr             { $$ = mp<ast_rel_pred>($1, $2, $3); }
-  | expr REL_EQ expr              { $$ = mp<ast_rel_pred>($1, $2, $3); }
-  | expr REL_GEQ expr             { $$ = mp<ast_rel_pred>($1, $2, $3); }
-  | expr REL_GT expr              { $$ = mp<ast_rel_pred>($1, $2, $3); }
-  | pred L_OR pred                { $$ = mp<ast_bin_l_pred>($1, $2, $3); }
-  | pred L_AND pred               { $$ = mp<ast_bin_l_pred>($1, $2, $3); }
-  | L_NOT pred                    { $$ = mp<ast_uny_l_pred>($1, $2); }
+  : expr REL_LT expr              { $$ = mp<ast_rel_pred>($1, $2, $3, line_num); }
+  | expr REL_LEQ expr             { $$ = mp<ast_rel_pred>($1, $2, $3, line_num); }
+  | expr REL_EQ expr              { $$ = mp<ast_rel_pred>($1, $2, $3, line_num); }
+  | expr REL_GEQ expr             { $$ = mp<ast_rel_pred>($1, $2, $3, line_num); }
+  | expr REL_GT expr              { $$ = mp<ast_rel_pred>($1, $2, $3, line_num); }
+  | pred L_OR pred                { $$ = mp<ast_bin_l_pred>($1, $2, $3, line_num); }
+  | pred L_AND pred               { $$ = mp<ast_bin_l_pred>($1, $2, $3, line_num); }
+  | L_NOT pred                    { $$ = mp<ast_uny_l_pred>($1, $2, line_num); }
   | LPAREN pred RPAREN            { $$ = $2; }
 
   // error handling
-  | expr REL_LT error              { $$ = mp<ast_syntax_error>("pred: expr REL_LT error", line_num); }
-  | expr REL_LEQ error             { $$ = mp<ast_syntax_error>("pred: expr REL_LEQ error", line_num); }
-  | expr REL_EQ error              { $$ = mp<ast_syntax_error>("pred: expr REL_EQ error", line_num); }
-  | expr REL_GEQ error             { $$ = mp<ast_syntax_error>("pred: expr REL_GEQ error", line_num); }
-  | expr REL_GT error              { $$ = mp<ast_syntax_error>("pred: expr REL_GT error", line_num); }
-  | pred L_OR error                { $$ = mp<ast_syntax_error>("pred: pred L_OR error", line_num); }
-  | pred L_AND error               { $$ = mp<ast_syntax_error>("pred: pred L_AND error", line_num); }
-  | L_NOT error                    { $$ = mp<ast_syntax_error>("pred: L_NOT error", line_num); }
+  | expr REL_LT error              { $$ = mp<ast_syntax_error>("Predicado inválido", line_num); }
+  | expr REL_LEQ error             { $$ = mp<ast_syntax_error>("Predicado inválido", line_num); }
+  | expr REL_EQ error              { $$ = mp<ast_syntax_error>("Predicado inválido", line_num); }
+  | expr REL_GEQ error             { $$ = mp<ast_syntax_error>("Predicado inválido", line_num); }
+  | expr REL_GT error              { $$ = mp<ast_syntax_error>("Predicado inválido", line_num); }
+  | pred L_OR error                { $$ = mp<ast_syntax_error>("Predicado inválido", line_num); }
+  | pred L_AND error               { $$ = mp<ast_syntax_error>("Predicado inválido", line_num); }
+  | L_NOT error                    { $$ = mp<ast_syntax_error>("Predicado inválido", line_num); }
   ;
 
 seq_fun_def

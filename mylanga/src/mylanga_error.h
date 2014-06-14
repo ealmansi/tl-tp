@@ -5,9 +5,9 @@
 #include <string>
 using namespace std;
 
-#define MYLANGA_SYNTAX_ERROR(ln) ("Error sintáctico detectado en la línea " + to_string(ln))
+#define MYLANGA_SYNTAX_ERROR(ln) ("Error sintáctico detectado en la línea " + to_string(ln) + ".")
 
-#define MYLANGA_PARSE_ERROR "Error de parseo"
+#define MYLANGA_PARSE_ERROR(ln) ("Error de parseo detectado en la línea " + to_string(ln) + ".")
 
 #define MYLANGA_RUNTIME_ERROR "Error en tiempo de ejecución"
 
