@@ -7,13 +7,14 @@ using namespace std;
 #include "mylanga_fp_t.h"
 #include "mylanga_ast.h"
 #include "mylanga_sem_types.h"
+#include "mylanga_error.h"
 #define YYSTYPE mylanga_sem_types
 
 extern int line_num; int temp;
 extern ptr<ast_program> pg;
 
 extern int yylex();
-void yyerror(const char *s) { cerr << "error sintaxis" << " " << "detectado en la línea " << line_num << endl; }
+void yyerror(const char *s) { cerr << MYLANGA_SYNTAX_ERROR(line_num) << endl; }
 
 %}
 

@@ -5,6 +5,7 @@ using namespace std;
 #include "mylanga_fp_t.h"
 #include "mylanga_ast.h"
 #include "mylanga_sem_types.h"
+#include "mylanga_error.h"
 #define YYSTYPE mylanga_sem_types
 
 #include "parser.hpp"
@@ -45,8 +46,7 @@ void symbol_table::set_var(ptr<id> _id, fp_t value)
 {
   if (scopes.empty())
   {
-    // error inesperado
-    cerr << "error inesperado" << endl;
+    MYLANGA_INTERNAL_ERROR();
   }
 
   auto& scope = scopes.top();
@@ -57,8 +57,7 @@ maybe_fp_t symbol_table::get_var(ptr<id> _id)
 {
   if (scopes.empty())
   {
-    // error inesperado
-    cerr << "error inesperado" << endl;
+    MYLANGA_INTERNAL_ERROR();
   }
 
   auto& scope = scopes.top();
@@ -78,8 +77,10 @@ fp_t ast_id_expr::eval(symbol_table& sym)
   
   if (not var.is_valid)
   {
-    // error runtime
-    cerr << "error runtime" << endl;
+    // runtime error
+    cerr << MYLANGA_RUNTIME_ERROR << " | " << \
+      "Lectura de la variable " << *_id << " sin haberle asignado previamente un valor." << endl;
+    MYLANGA_END_ABRUPTLY();
   }
 
   return var.value;
@@ -96,8 +97,7 @@ fp_t ast_bin_op_expr::eval(symbol_table& sym)
     case OP_EXP: return pow(_ex1->eval(sym), _ex2->eval(sym));
   }
   
-  // error inesperado
-  cerr << "error inesperado" << endl;
+  MYLANGA_INTERNAL_ERROR();
 }
 
 fp_t ast_uny_op_expr::eval(symbol_table& sym)
@@ -107,8 +107,7 @@ fp_t ast_uny_op_expr::eval(symbol_table& sym)
     case OP_MINUS: return - _ex->eval(sym);
   }
 
-  // error inesperado
-  cerr << "error inesperado" << endl;
+  MYLANGA_INTERNAL_ERROR();
 }
 
 fp_t ast_fun_call_expr::eval(symbol_table& sym)
@@ -131,8 +130,10 @@ fp_t ast_fun_call_expr::eval(symbol_table& sym)
 
   if (not ret.is_valid)
   {
-    // error runtime
-    cerr << "error runtime" << endl;
+    // runtime error
+    cerr << MYLANGA_RUNTIME_ERROR << " | " << \
+      "La función " << *_id << " se ejecutó sin retornar un valor." << endl;
+    MYLANGA_END_ABRUPTLY();
   }
 
   return ret.value;
@@ -151,8 +152,7 @@ bool ast_rel_pred::test(symbol_table& sym)
     case REL_GT: return _ex1->eval(sym) > _ex2->eval(sym);
   }
   
-  // error inesperado
-  cerr << "error inesperado" << endl;
+  MYLANGA_INTERNAL_ERROR();
 }
 
 bool ast_bin_l_pred::test(symbol_table& sym)
@@ -163,8 +163,7 @@ bool ast_bin_l_pred::test(symbol_table& sym)
     case L_AND: return _pr1->test(sym) and _pr2->test(sym);
   }
   
-  // error inesperado
-  cerr << "error inesperado" << endl;
+  MYLANGA_INTERNAL_ERROR();
 }
 
 bool ast_uny_l_pred::test(symbol_table& sym)
@@ -174,8 +173,7 @@ bool ast_uny_l_pred::test(symbol_table& sym)
     case L_NOT: return not _pr->test(sym);
   }
   
-  // error inesperado
-  cerr << "error inesperado" << endl;
+  MYLANGA_INTERNAL_ERROR();
 }
 
 /*  *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   */
@@ -272,8 +270,8 @@ bool ast_id_expr::is_valid(symbol_table& sym)
   bool res = true;
   if (not sym.var_is_declared(_id))
   {
-    // error semántico
-    cerr << "error semántico" << " " << __PRETTY_FUNCTION__ << endl;
+    cerr << MYLANGA_PARSE_ERROR << " | " << \
+      "La variable " << *_id << " no se encuentra previamente declarada." << endl;
     res = false;
   }
 
@@ -306,15 +304,17 @@ bool ast_fun_call_expr::is_valid(symbol_table& sym)
     ptr<ast_fun_def> _fd = sym.get_fun_def(_id);
     if (_fd == nullptr)
     {
-      // error semántico
-      cerr << "error semántico" << " " << __PRETTY_FUNCTION__ << endl;
+      cerr << MYLANGA_PARSE_ERROR << " | " << \
+        "La función " << *_id << " no se encuentra definida." << endl;
       res = false; break;
     }
 
     if (_fd->_ids->size() != _exs->size())
     {
-      // error semántico
-      cerr << "error semántico" << " " << __PRETTY_FUNCTION__ << endl;
+      cerr << MYLANGA_PARSE_ERROR << " | " << \
+        "La función " << (*(_fd->_id)) << " recibe " << to_string(_fd->_ids->size()) << \
+        " parámetro(s), pero es invocada con " <<  to_string(_exs->size()) << \
+        " argumento(s)." << endl;
       res = false; break;
     }
   } while (false);
@@ -426,8 +426,8 @@ bool ast_plot_cmd::is_valid(symbol_table& sym)
 
     if (not (range_from <= range_to and 0 < range_step))
     {
-      // error semántico
-      cerr << "error semántico" << " " << __PRETTY_FUNCTION__ << endl;
+      cerr << MYLANGA_PARSE_ERROR << " | " << \
+        "El rango del comando plot es inválido; un rango válido a..d..b debe cumplir a <= b y 0 < d." << endl;
       res = false;
     }
 
@@ -450,15 +450,15 @@ bool ast_fun_def::is_valid(symbol_table& sym)
 
   if (sym.get_fun_def(_id) != nullptr)
   {
-    // error semántico
-    cerr << "error semántico" << " " << __PRETTY_FUNCTION__ << endl;
+    cerr << MYLANGA_PARSE_ERROR << " | " << \
+      "La función " << *_id << " ya está definida." << endl;
     res = false;
   }
 
   if (has_repeated_elements(_ids))
   {
-    // error semántico
-    cerr << "error semántico" << " " << __PRETTY_FUNCTION__ << endl;
+    cerr << MYLANGA_PARSE_ERROR << " | " << \
+      "La función " << *_id << " contiene parámetros repetidos en su definición." << endl;
     res = false;
   }
 
@@ -513,37 +513,31 @@ bool ast_program::run()
 
 bool ast_syntax_error::is_valid(symbol_table& sym)
 {
-  // error sintaxis
-  cerr << "error sintaxis" << " " << "detectado en la línea" << " " << _ln << " " << _str << endl;
+  cerr << MYLANGA_SYNTAX_ERROR(_ln) << " | " << _str << endl;
   return false;
 }
 
 fp_t ast_syntax_error::eval(symbol_table& sym)
 {
-  // error inesperado
-  cerr << "error inesperado" << endl;
+  MYLANGA_INTERNAL_ERROR();
 }
 
 bool ast_syntax_error::test(symbol_table& sym)
 {
-  // error inesperado
-  cerr << "error inesperado" << endl;
+  MYLANGA_INTERNAL_ERROR();
 }
 
 maybe_fp_t ast_syntax_error::exec(symbol_table& sym)
 {
-  // error inesperado
-  cerr << "error inesperado" << endl;
+  MYLANGA_INTERNAL_ERROR();
 }
 
 void ast_syntax_error::plot(symbol_table& sym)
 {
-  // error inesperado
-  cerr << "error inesperado" << endl;
+  MYLANGA_INTERNAL_ERROR();
 }
 
 bool ast_syntax_error::run()
 {
-  // error inesperado
-  cerr << "error inesperado" << endl;
+  MYLANGA_INTERNAL_ERROR();
 }

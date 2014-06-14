@@ -14,7 +14,10 @@ function fib(n) {
   return fib_n
 }
 
+function fib(n,n)
+  return n
+
 function id(n)
   return n
 
-plot (id(n), fib(n)) for n=0..1..20
+plot (id(n,n), fib(k)) for n = 0..1..-1
