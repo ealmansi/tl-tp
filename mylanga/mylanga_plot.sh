@@ -11,7 +11,7 @@ if (( $# != 2 )); then
 fi
 
 cat $1 | $EXE > $TMP_FILE && \
-  gnuplot -e "set nokey; set terminal png size 550,500 enhanced font 'Helvetica,12'; set output '$2'; plot '$TMP_FILE'" && \
+  gnuplot -e "set nokey; set terminal png size 550,500 enhanced font 'Helvetica,12'; set output '$2'; plot '$TMP_FILE' using 1:2 with lines" && \
   (eog $2 &)
 
 rm -f $TMP_FILE

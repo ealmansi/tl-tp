@@ -17,6 +17,11 @@ void symbol_table::define_fun(ptr<ast_fun_def> _fd)
   functions[*(_fd->_id)] = _fd;
 }
 
+void symbol_table::undefine_fun(ptr<ast_fun_def> _fd)
+{
+  functions.erase(*(_fd->_id));
+}
+
 ptr<ast_fun_def> symbol_table::get_fun_def(ptr<id> _id)
 {
   return (functions.count(*_id) > 0) ? functions[*_id] : nullptr;
@@ -462,6 +467,8 @@ bool ast_fun_def::is_valid(symbol_table& sym)
     res = false;
   }
 
+  // para soportar recursión
+  sym.define_fun(shared_from_this());
   sym.open_scope();
 
   for (auto _id : *_ids)
@@ -470,6 +477,7 @@ bool ast_fun_def::is_valid(symbol_table& sym)
   res = _bl->is_valid(sym) and res;
 
   sym.close_scope();
+  sym.undefine_fun(shared_from_this());
 
   return res;
 }

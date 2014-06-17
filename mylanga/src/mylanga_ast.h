@@ -124,6 +124,7 @@ struct ast_syntax_error;
 struct symbol_table
 {
   void define_fun(ptr<ast_fun_def> _fd);
+  void undefine_fun(ptr<ast_fun_def> _fd);
   ptr<ast_fun_def> get_fun_def(ptr<id> _id);
 
   void open_scope();
@@ -356,7 +357,7 @@ struct ast_plot_cmd : virtual ast_node
   field_decls(ast_plot_cmd_fields);
 };
 
-struct ast_fun_def : virtual ast_node
+struct ast_fun_def : virtual ast_node, enable_shared_from_this<ast_fun_def>
 {
   ast_fun_def() {}
   ast_fun_def(ctor_params(ast_fun_def_fields), int _ln)
