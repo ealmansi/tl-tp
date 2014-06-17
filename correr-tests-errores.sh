@@ -5,6 +5,6 @@ EJECUTABLE=$SCRIPTPATH/mylanga/bin/mylanga_parser
 for f in $TESTS_ERRORES/*.cod
 do
   printf "Ejecutando $f...\n"
-  cat $f | $EJECUTABLE > /dev/null
+  cat $f | $EJECUTABLE > /dev/null && printf "($0): *** No hubo errores\n"
   printf "\n"
 done

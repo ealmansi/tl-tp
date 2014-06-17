@@ -118,14 +118,14 @@ stmt
   | KW_RETURN expr                            { $$ = mp<ast_return_stmt>($2, line_num); }
 
   // error handling
-  | error EQUAL expr                                { $$ = mp<ast_syntax_error>("Instrucción de asignación inválida.", line_num); }
-  | ID EQUAL error                                  { $$ = mp<ast_syntax_error>("La expresión de lado derecho de la asignación es inválida.", line_num); }
-  | KW_IF expr { temp = line_num; } KW_THEN block   { $$ = mp<ast_syntax_error>("La guarda de un if debe ser un predicado con valor booleano.", temp); }
-  | KW_WHILE expr { temp = line_num; } block        { $$ = mp<ast_syntax_error>("La guarda de un while debe ser un predicado con valor booleano.", temp); }
-  | KW_IF pred { temp = line_num; } block           { $$ = mp<ast_syntax_error>("Falta la palabra clave 'then' en la instrucción if.", temp); }
-  | KW_IF error                                     { $$ = mp<ast_syntax_error>("La guarda del if es inválida.", line_num); }
-  | KW_WHILE error                                  { $$ = mp<ast_syntax_error>("La guarda del while es inválida.", line_num); }
-  | KW_RETURN error                                 { $$ = mp<ast_syntax_error>("La expresión de retorno es inválida.", line_num); }
+  | error EQUAL expr                                              { $$ = mp<ast_syntax_error>("Instrucción de asignación inválida.", line_num); }
+  | ID EQUAL error                                                { $$ = mp<ast_syntax_error>("La expresión de lado derecho de la asignación es inválida.", line_num); }
+  | KW_IF expr { temp = line_num; } KW_THEN block KW_ELSE block   { $$ = mp<ast_syntax_error>("La guarda de un if debe ser un predicado con valor booleano.", temp); }
+  | KW_WHILE expr { temp = line_num; } block                      { $$ = mp<ast_syntax_error>("La guarda de un while debe ser un predicado con valor booleano.", temp); }
+  | KW_IF pred { temp = line_num; } block                         { $$ = mp<ast_syntax_error>("Falta la palabra clave 'then' en la instrucción if.", temp); }
+  | KW_IF error                                                   { $$ = mp<ast_syntax_error>("La guarda del if es inválida.", line_num); }
+  | KW_WHILE error                                                { $$ = mp<ast_syntax_error>("La guarda del while es inválida.", line_num); }
+  | KW_RETURN error                                               { $$ = mp<ast_syntax_error>("La expresión de retorno es inválida.", line_num); }
   ;
 
 expr
