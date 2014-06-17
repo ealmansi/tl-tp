@@ -6,10 +6,12 @@ using namespace std;
 
 #include "mylanga_ast.h"
 #include "mylanga_sem_types.h"
+#include "mylanga_error.h"
 #define YYSTYPE mylanga_sem_types
 
 #include "parser.hpp"
 
+#define ECHO // no borrar, sino tokens.cpp mete \n's espurios en la salida
 extern "C" int yywrap() { }
 int line_num = 1;
 
@@ -58,7 +60,7 @@ int line_num = 1;
 ")"                       yylval._int = RPAREN; return RPAREN;
 "{"                       yylval._int = LBRACE; return LBRACE;
 "}"                       yylval._int = RBRACE; return RBRACE;
-.                         cout << "Lexer error: Token inesperado \"" << string(yytext, yyleng) << "\"" << endl; yyterminate();
+.                         cerr << MYLANGA_LEXER_ERROR(line_num) << " | " << "Token no reconocido \"" << string(yytext, yyleng) << "\"." << endl; yyterminate();
 }
 
 <IN_SINGL_COMMENT>{

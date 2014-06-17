@@ -19,7 +19,7 @@ $(AUTO)/tokens.cpp: $(SRC)/tokens.l
 $(OBJ)/parser.o: $(AUTO)/parser.cpp $(SRC)/mylanga_fp_t.h $(SRC)/mylanga_ast.h $(SRC)/mylanga_sem_types.h $(SRC)/mylanga_error.h
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(OBJ)/tokens.o: $(AUTO)/tokens.cpp $(SRC)/mylanga_ast.h $(SRC)/mylanga_sem_types.h $(AUTO)/parser.hpp
+$(OBJ)/tokens.o: $(AUTO)/tokens.cpp $(SRC)/mylanga_ast.h $(SRC)/mylanga_sem_types.h $(SRC)/mylanga_error.h $(AUTO)/parser.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(OBJ)/mylanga_fp_t.o: $(SRC)/mylanga_fp_t.cpp $(SRC)/mylanga_fp_t.h

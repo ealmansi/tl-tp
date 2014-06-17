@@ -95,8 +95,11 @@ plot_cmd
                                   { $$ = mp<ast_plot_cmd>($3, $5, $8, $10, $12, $14, line_num); }
 
   // error handling
+  | KW_PLOT expr
+    KW_FOR ID EQUAL expr ELLIPSIS expr ELLIPSIS expr
+                                  { $$ = mp<ast_syntax_error>("En la instrucción plot, se espera un par (x,y) luego de la palabra \"plot\".", line_num); }  
   | KW_PLOT LPAREN expr COMMA expr RPAREN /* */
-                                  { $$ = mp<ast_syntax_error>("Falta definir el rango de la instrucción de plot.", line_num); }  
+                                  { $$ = mp<ast_syntax_error>("En la instrucción plot, falta definir un rango de evaluación.", line_num); }  
   ;
 
 block
