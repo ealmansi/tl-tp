@@ -1,5 +1,5 @@
 pushd `dirname $0` > /dev/null && SCRIPTPATH=`pwd` && popd > /dev/null
-EXE=$SCRIPTPATH/bin/mylanga_parser
+EXE=$SCRIPTPATH/mylanga_parser
 TMP_FILE=$(mktemp)
 
 if (( $# != 2 )); then

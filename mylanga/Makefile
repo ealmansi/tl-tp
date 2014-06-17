@@ -29,7 +29,8 @@ $(OBJ)/mylanga_ast.o: $(SRC)/mylanga_ast.cpp $(SRC)/mylanga_fp_t.h $(SRC)/mylang
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(BIN)/mylanga_parser: $(SRC)/main.cpp $(OBJ)/parser.o $(OBJ)/tokens.o $(OBJ)/mylanga_fp_t.o $(OBJ)/mylanga_ast.o
-	$(CXX) $(CXXFLAGS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $^ -o $@;
+	cp $(BIN)/mylanga_parser ..
 
 .PHONY: clean wipe
 

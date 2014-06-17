@@ -432,7 +432,14 @@ bool ast_plot_cmd::is_valid(symbol_table& sym)
     if (not (range_from <= range_to and 0 < range_step))
     {
       cerr << MYLANGA_PARSE_ERROR(_ln) << " | " << \
-        "El rango del comando plot es inválido; un rango válido a..d..b debe cumplir a <= b y 0 < d." << endl;
+        "En la instrucción de plot, el rango de evaluación es inválido; un rango válido a..d..b debe cumplir a <= b y 0 < d." << endl;
+      res = false;
+    }
+
+    if (not (_ex_x->is_plottable() and _ex_y->is_plottable()))
+    {
+      cerr << MYLANGA_PARSE_ERROR(_ln) << " | " << \
+        "En la instrucción de plot, las expresiones a evaluar deben ser de tipo llamado a función." << endl;
       res = false;
     }
 

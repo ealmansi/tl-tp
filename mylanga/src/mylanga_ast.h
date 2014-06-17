@@ -159,6 +159,7 @@ struct ast_expr : virtual ast_node
   virtual ~ast_expr() {}
   virtual bool is_valid(symbol_table& sym) = 0;
   virtual fp_t eval(symbol_table& sym) = 0;
+  virtual bool is_plottable() { return false; };
 };
 
 struct ast_literal_expr : virtual ast_node, ast_expr
@@ -216,7 +217,8 @@ struct ast_fun_call_expr : virtual ast_node, ast_expr
     : init_list(ast_fun_call_expr_fields), ast_node(_ln) {}
   ~ast_fun_call_expr() {}
   virtual bool is_valid(symbol_table& sym);
-  fp_t eval(symbol_table& sym);
+  virtual fp_t eval(symbol_table& sym);
+  virtual bool is_plottable() { return true; };
 
   field_decls(ast_fun_call_expr_fields);
 };

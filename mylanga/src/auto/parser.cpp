@@ -1601,7 +1601,7 @@ yyreduce:
   case 9:
 /* Line 1787 of yacc.c  */
 #line 100 "src/parser.y"
-    { (yyval._pc) = mp<ast_syntax_error>("En la instrucción plot, se espera un par (x,y) luego de la palabra \"plot\".", line_num); }
+    { (yyval._pc) = mp<ast_syntax_error>("En la instrucción plot, se espera un par (fx(...),fy(...)) luego de la palabra \"plot\".", line_num); }
     break;
 
   case 10:
