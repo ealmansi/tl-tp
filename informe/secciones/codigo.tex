@@ -1,0 +1,26 @@
+\subsection{Flex}
+\lstinputlisting[basicstyle=\fontsize{7}{9}\selectfont\ttfamily,breaklines=true,language=C]{src/tokens.l}
+
+Definimos todos los tokens posibles según el lenguaje MyLanga. Cabe destacar que para hacer comentarios multilínea se hace uso de un cambio de contexto en Flex que solo puede retornar al contexto original una vez que lee el token de fin de comentario.
+
+\newpage
+\subsection{Bison}
+
+\lstinputlisting[basicstyle=\fontsize{7}{9}\selectfont\ttfamily,breaklines=true,language=C]{src/parser.y}
+
+Las reglas de bison son muy similares a las de la gramática definida anteriormente. La principal diferencia es que se agregan reglas de error para que matcheen explícitamente algunos casos de error específicos y de esa manera poder devolver mensajes más declarativos.
+A su vez se ve como se arma el árbol \emph{AST} que luego será utilizado para la ejecución del código. Es decir, al programa se le agrega una instancia de su bloque de funciones y su llamado a plot. Al bloque de funciones se le va empujando cada función definida. Dentro de cada función se agrega cada instrucción, etc.
+
+\newpage
+\subsection{Implementación del AST}
+\subsubsection{Definición de clases y estructuras}
+Primero definimos todas las clases que se usaron para implementar el AST. Se puede ver que son las mismas que se llaman desde las reglas de Bison.
+\newline
+
+\lstinputlisting[basicstyle=\fontsize{7}{9}\selectfont\ttfamily,breaklines=true,language=C]{src/mylanga_ast.h}
+\newpage
+\subsubsection{Implementación de clases y estructuras}
+Finalmente, su implementación.
+\newline
+
+\lstinputlisting[basicstyle=\fontsize{7}{9}\selectfont\ttfamily,breaklines=true,language=C]{src/mylanga_ast.cpp}

@@ -1,0 +1,89 @@
+\subsection{Gramática}
+
+Definimos la siguiente gramática G = $<$ \{ Program, Seq\_fun\_def, Fun\_def, Lst\_id, Lst\_id2, Block, Seq\_stmt, Stmt, Pred, Expr, Lst\_expr, Lst\_expr2, Plot\_cmd \}, \{ for, plot, if, then, else, while, return, function, pi, id, int, float, $+$, $-$, $*$, $/$, $\wedge$, $\;$, ,, .., $=$, $||$, $\&\&$, !, $<$, $<=$, $==$, $>=$, $>$, $($, $)$, $\{$, $\}$ \}, P, Program $>$ donde P son las siguientes producciones:
+\newline
+
+\noindent Program $\rightarrow$ Seq\_fun\_def Plot\_cmd 
+\newline
+\noindent \emph{Una programa válido es una secuencia de funciones y un comando plot.}
+\newline
+
+\noindent Seq\_fun\_def $\rightarrow$ Fun\_def $|$ Seq\_fun\_def Fun\_def 
+\newline
+\noindent \emph{Una secuencia de funciones es una función o una secuencia seguida de una función.}
+\newline
+
+\noindent Fun\_def $\rightarrow$ function id ( Lst\_id ) Block
+\newline
+\noindent \emph{Una función bien definida es un ID de función seguido de los parámetros (lista de ids) rodeados por paréntesis y por último un bloque de instrucciones.}
+\newline
+
+\noindent Lst\_id $\rightarrow$ $\lambda$ $|$ Lst\_id2
+\newline
+\noindent \emph{Una lista de parámetros es o bien una lista vacía o una con parámetros.}
+\newline
+
+\noindent Lst\_id2 $\rightarrow$ id $|$ Lst\_id2 , id
+\newline
+\noindent \emph{Una lista con parámetros es o un ID o una lista seguida de una coma y otro ID.}
+\newline
+
+\noindent Block $\rightarrow$ Stmt $|$ \{ Seq\_stmt \}
+\newline
+\noindent \emph{Un bloque de instrucciones es o bien una única instrucción o una secuencia de instrucciones entre llaves.}
+\newline
+
+\noindent Seq\_stmt $\rightarrow$ Stmt $|$ Seq\_stmt Stmt 
+\newline
+\noindent \emph{Una secuencia de instrucciones es o bien una instrucción o una secuencia seguida de una instrucción.}
+\newline
+
+\noindent Stmt $\rightarrow$ id = Expr \newline
+$|$ if Pred then Block \newline
+$|$ if Pred then Block else Block \newline
+$|$ while Pred block \newline
+$|$ return Expr \newline
+\noindent \emph{Las instrucciones son o bien una asignación, un if (con y sin else), un while o un return.}
+\newline
+
+\noindent Pred $\rightarrow$ Expr $<$ Expr \newline
+$|$ Expr $<=$ Expr \newline
+$|$ Expr $==$ Expr \newline
+$|$ Expr $>=$ Expr \newline
+$|$ Expr $>$ Expr \newline
+$|$ Pred $||$ Pred \newline
+$|$ Pred \&\& Pred \newline
+$|$ ! Pred \newline
+$|$ ( Pred ) \newline
+\noindent \emph{Los predicados se componen mediante operadores binarios o negaciones. También pueden estar rodeados por paréntesis.}
+\newpage
+
+\noindent Expr $\rightarrow$ int \newline
+$|$ float \newline
+$|$ pi \newline
+$|$ id \newline
+$|$ Expr + Expr \newline
+$|$ Expr - Expr \newline
+$|$ Expr * Expr \newline
+$|$ Expr / Expr \newline
+$|$ Expr $\wedge$ Expr \newline
+$|$ - Expr \newline
+$|$ id ( Lst\_expr ) \newline
+$|$ ( Expr ) \newline
+\noindent \emph{Las expresiones son o bien literales de enteros y flotantes, o un id de variable, o una operación aritmética entre expresiones. También pueden ser llamados a funciones, la negativización, o la constante pi. Por último, también pueden estar rodeadas por paréntesis.}
+\newline
+
+\noindent Lst\_expr $\rightarrow$ $\lambda$ $|$ Lst\_expr2
+\newline
+\noindent \emph{Una lista de expresiones es o bien una lista vacía o una con expresiones.}
+\newline
+
+\noindent Lst\_expr2 $\rightarrow$ Expr $|$ Lst\_expr2 , Expr
+\newline
+\noindent \emph{Una lista con expresiones es o una expresión o una lista seguida de una coma y otra expresión.}
+\newline
+
+\noindent Plot\_cmd $\rightarrow$ plot ( Expr , Expr ) for id $=$ Expr .. Expr .. Expr
+\newline
+\noindent \emph{Por último el comando plot recibe dos expresiones a llamar y un for con 3 expresiones con un valor, un tope y un incremento para una variable id.}
+\newline

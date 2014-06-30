@@ -1,0 +1,461 @@
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.11.14)  30 JUN 2014 02:30
+entering extended mode
+**informe.tex
+(D:\tlen\informe\informe.tex
+LaTeX2e <2011/06/27>
+Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, arabic, armenian, assamese, basque, bengali
+, bokmal, bulgarian, catalan, coptic, croatian, czech, danish, dutch, esperanto, estonian, farsi, finnish, french, galic
+ian, german, german-x-2012-05-30, greek, gujarati, hindi, hungarian, icelandic, indonesian, interlingua, irish, italian,
+ kannada, kurmanji, latin, latvian, lithuanian, malayalam, marathi, mongolian, mongolianlmc, monogreek, ngerman, ngerman
+-x-2012-05-30, nynorsk, oriya, panjabi, pinyin, polish, portuguese, romanian, russian, sanskrit, serbian, slovak, sloven
+ian, spanish, swedish, swissgerman, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, usenglishmax, w
+elsh, loaded.
+("d:\Program Files\MiKTeX 2.9\tex\latex\base\article.cls"
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+("d:\Program Files\MiKTeX 2.9\tex\latex\base\size10.clo"
+File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) ("d:\Program Files\MiKTeX 2.9\tex\latex\geometry\geometry.sty"
+Package: geometry 2010/09/12 v5.6 Page Geometry
+ ("d:\Program Files\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+("d:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifpdf.sty"
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+)
+("d:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifvtex.sty"
+Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+)
+("d:\Program Files\MiKTeX 2.9\tex\generic\ifxetex\ifxetex.sty"
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+\Gm@cnth=\count87
+\Gm@cntv=\count88
+\c@Gm@tempcnt=\count89
+\Gm@bindingoffset=\dimen103
+\Gm@wd@mp=\dimen104
+\Gm@odd@mp=\dimen105
+\Gm@even@mp=\dimen106
+\Gm@layoutwidth=\dimen107
+\Gm@layoutheight=\dimen108
+\Gm@layouthoffset=\dimen109
+\Gm@layoutvoffset=\dimen110
+\Gm@dimlist=\toks15
+
+("d:\Program Files\MiKTeX 2.9\tex\latex\geometry\geometry.cfg"))
+("d:\Program Files\MiKTeX 2.9\tex\latex\base\inputenc.sty"
+Package: inputenc 2008/03/30 v1.1d Input encoding file
+\inpenc@prehook=\toks16
+\inpenc@posthook=\toks17
+ ("d:\Program Files\MiKTeX 2.9\tex\latex\base\latin1.def"
+File: latin1.def 2008/03/30 v1.1d Input encoding file
+))
+("d:\Program Files\MiKTeX 2.9\tex\latex\listings\listings.sty"
+\lst@mode=\count90
+\lst@gtempboxa=\box26
+\lst@token=\toks18
+\lst@length=\count91
+\lst@currlwidth=\dimen111
+\lst@column=\count92
+\lst@pos=\count93
+\lst@lostspace=\dimen112
+\lst@width=\dimen113
+\lst@newlines=\count94
+\lst@lineno=\count95
+\lst@maxwidth=\dimen114
+
+("d:\Program Files\MiKTeX 2.9\tex\latex\listings\lstmisc.sty"
+File: lstmisc.sty 2014/03/04 1.5c (Carsten Heinz)
+\c@lstnumber=\count96
+\lst@skipnumbers=\count97
+\lst@framebox=\box27
+)
+("d:\Program Files\MiKTeX 2.9\tex\latex\listings\listings.cfg"
+File: listings.cfg 2014/03/04 1.5c listings configuration
+))
+Package: listings 2014/03/04 1.5c (Carsten Heinz)
+
+\@input{caratula.aux}
+(D:\tlen\informe\caratula.tex (D:\tlen\informe\caratula.sty
+Package: caratula 2005/08/09 v0.4 Para componer caratulas de TPs del DC
+ ("d:\Program Files\MiKTeX 2.9\tex\latex\base\ifthen.sty"
+Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
+)
+("d:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+("d:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+ ("d:\Program Files\MiKTeX 2.9\tex\latex\graphics\trig.sty"
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+) ("d:\Program Files\MiKTeX 2.9\tex\latex\00miktex\graphics.cfg"
+File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+
+("d:\Program Files\MiKTeX 2.9\tex\latex\pdftex-def\pdftex.def"
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+("d:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\infwarerr.sty"
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+)
+("d:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count98
+))
+\Gin@req@height=\dimen115
+\Gin@req@width=\dimen116
+)
+Cargando package 'caratula' v0.4 (2006/09/29)
+\intlist=\toks19
+\intlistSinLU=\toks20
+\c@integrantesCount=\count99
+\intTabNombre=\toks21
+\intTabLU=\toks22
+\intTabEmail=\toks23
+\c@directoresCount=\count100
+\direcTabNombre=\toks24
+\direcTabEmail=\toks25
+) ("d:\Program Files\MiKTeX 2.9\tex\latex\a4wide\a4wide.sty"
+Package: a4wide 1994/08/30
+ ("d:\Program Files\MiKTeX 2.9\tex\latex\ntgclass\a4.sty"
+Package: a4 2004/04/15 v1.2g A4 based page layout
+))
+("d:\Program Files\MiKTeX 2.9\tex\latex\base\alltt.sty"
+Package: alltt 1997/06/16 v2.0g defines alltt environment
+) ("d:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\amsfonts.sty"
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\@emptytoks=\toks26
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+) (D:\tlen\informe\informe.aux (D:\tlen\informe\secciones/intro.aux) (D:\tlen\informe\secciones/resolucion.aux)
+(D:\tlen\informe\secciones/gramatica.aux) (D:\tlen\informe\secciones/codigo.aux) (D:\tlen\informe\secciones/ejemplos.aux
+) (D:\tlen\informe\secciones/preguntas.aux))
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(42.67912pt, 512.14963pt, 42.67912pt)
+* v-part:(T,H,B)=(99.58464pt, 702.78308pt, 42.67912pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=424.58624pt
+* \textheight=646.0pt
+* \oddsidemargin=18.06749pt
+* \evensidemargin=18.06749pt
+* \topmargin=0.0pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=54.2025pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+\c@lstlisting=\count101
+("d:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count102
+\scratchdimen=\dimen117
+\scratchbox=\box28
+\nofMPsegments=\count103
+\nofMParguments=\count104
+\everyMPshowfont=\toks27
+\MPscratchCnt=\count105
+\MPscratchDim=\dimen118
+\MPnumerator=\count106
+\makeMPintoPDFobject=\count107
+\everyMPtoPDFconversion=\toks28
+) <logo_dc.jpg, id=1, 215.6055pt x 83.5923pt>
+File: logo_dc.jpg Graphic file (type jpg)
+ <use logo_dc.jpg>
+Package pdftex.def Info: logo_dc.jpg used on input line 15.
+(pdftex.def)             Requested size: 215.60497pt x 83.59207pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--15
+
+ []
+
+LaTeX Font Info:    Try loading font information for U+msa on input line 15.
+("d:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 15.
+ ("d:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+<logo_uba.jpg, id=2, 192.72pt x 198.0198pt>
+File: logo_uba.jpg Graphic file (type jpg)
+ <use logo_uba.jpg>
+Package pdftex.def Info: logo_uba.jpg used on input line 15.
+(pdftex.def)             Requested size: 192.71951pt x 198.01932pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--15
+
+ []
+
+[1
+
+
+{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map} <D:/tlen/informe/logo_dc.jpg> <D:/tlen/informe/logo_uba.jpg>])
+(D:\tlen\informe\informe.toc)
+\tf@toc=\write3
+ [2
+
+] (D:\tlen\informe\secciones/intro.tex
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 10.
+
+("d:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 10.
+
+
+Package amsfonts Warning: Obsolete command \bold; \mathbf should be used instead on input line 10.
+
+) [3
+
+] (D:\tlen\informe\secciones/resolucion.tex
+Underfull \hbox (badness 10000) in paragraph at lines 5--8
+
+ []
+
+) [4
+
+
+] (D:\tlen\informe\secciones/gramatica.tex
+Underfull \hbox (badness 10000) in paragraph at lines 3--5
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 6--10
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--15
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 16--20
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 21--25
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 26--30
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 31--35
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 36--40
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 41--48
+
+ []
+
+[5
+
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 61--75
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 76--80
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 81--85
+
+ []
+
+)
+Underfull \hbox (badness 10000) in paragraph at lines 86--13
+
+ []
+
+[6] (D:\tlen\informe\secciones/codigo.tex ("d:\Program Files\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
+File: lstlang1.sty 2014/03/04 1.5c listings language file
+)
+("d:\Program Files\MiKTeX 2.9\tex\latex\listings\lstmisc.sty"
+File: lstmisc.sty 2014/03/04 1.5c (Carsten Heinz)
+) (D:\tlen\informe\src/tokens.l
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <7> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 3.
+ [7
+
+
+]) [8]
+(D:\tlen\informe\src/parser.y [9] [10] [11]) [12]
+Underfull \hbox (badness 10000) in paragraph at lines 17--19
+
+ []
+
+(D:\tlen\informe\src/mylanga_ast.h [13] [14] [15] [16] [17]) [18]
+Underfull \hbox (badness 10000) in paragraph at lines 23--25
+
+ []
+
+(D:\tlen\informe\src/mylanga_ast.cpp [19] [20] [21] [22] [23] [24] [25])) [26] (D:\tlen\informe\secciones/ejemplos.tex
+Underfull \hbox (badness 10000) in paragraph at lines 15--17
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 18--20
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 33--35
+
+ []
+
+<img/parabola.png, id=99, 414.04688pt x 376.40625pt>
+File: img/parabola.png Graphic file (type png)
+ <use img/parabola.png>
+Package pdftex.def Info: img/parabola.png used on input line 38.
+(pdftex.def)             Requested size: 376.76239pt x 301.1254pt.
+ [27
+
+
+ <D:/tlen/informe/img/parabola.png>]
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 44.
+
+("d:\Program Files\MiKTeX 2.9\tex\latex\base\omlcmr.fd"
+File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 44.
+
+Underfull \hbox (badness 10000) in paragraph at lines 75--77
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 78--80
+
+ []
+
+[28] <img/seno.png, id=107, 414.04688pt x 376.40625pt>
+File: img/seno.png Graphic file (type png)
+ <use img/seno.png>
+Package pdftex.def Info: img/seno.png used on input line 94.
+(pdftex.def)             Requested size: 376.76239pt x 301.1254pt.
+ [29 <D:/tlen/informe/img/seno.png>] [30]
+<img/rara.png, id=115, 414.04688pt x 376.40625pt>
+File: img/rara.png Graphic file (type png)
+ <use img/rara.png>
+Package pdftex.def Info: img/rara.png used on input line 159.
+(pdftex.def)             Requested size: 376.76239pt x 301.1254pt.
+) [31 <D:/tlen/informe/img/rara.png>]
+(D:\tlen\informe\secciones/preguntas.tex
+Overfull \hbox (0.7707pt too wide) in paragraph at lines 2--2
+\OT1/cmr/bx/n/12 pode-mos ver-i-ficar esto estaticamente? Como in-cide en la gramatica?
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 4--6
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 7--9
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 10--12
+
+ []
+
+) [32
+
+
+] (D:\tlen\informe\informe.aux (D:\tlen\informe\secciones/intro.aux) (D:\tlen\informe\secciones/resolucion.aux)
+(D:\tlen\informe\secciones/gramatica.aux) (D:\tlen\informe\secciones/codigo.aux) (D:\tlen\informe\secciones/ejemplos.aux
+) (D:\tlen\informe\secciones/preguntas.aux)) ) 
+Here is how much of TeX's memory you used:
+ 4296 strings out of 493921
+ 58573 string characters out of 3147281
+ 447602 words of memory out of 3000000
+ 7479 multiletter control sequences out of 15000+200000
+ 9232 words of font info for 36 fonts, out of 3000000 for 9000
+ 841 hyphenation exceptions out of 8191
+ 38i,8n,54p,655b,1693s stack positions out of 5000i,500n,10000p,200000b,50000s
+<d:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><d:
+/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><d:/Program Files/MiKTeX 2.9/fonts/type1/public/amsf
+onts/cm/cmitt10.pfb><d:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><d:/Program Files/MiKTeX 2.9/
+fonts/type1/public/amsfonts/cm/cmr10.pfb><d:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><d:/Progr
+am Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><d:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
+cmss10.pfb><d:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><d:/Program Files/MiKTeX 2.9/fonts/t
+ype1/public/amsfonts/cm/cmsy10.pfb><d:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><d:/Program Fi
+les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb><d:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmt
+t8.pfb>
+Output written on informe.pdf (32 pages, 508251 bytes).
+PDF statistics:
+ 165 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
+

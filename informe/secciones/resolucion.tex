@@ -1,0 +1,15 @@
+\newpage
+\section{Resolución y aclaraciones}
+\subsection{Generalidades}
+
+Para la resolución del problema planteado se decidió utilizar dos de las herramientas propuestas en clase. $\bold{Flex}$ para generar el analizador léxico que provea los tokens del código MyLanga, y $\bold{Bison}$ como generador del parser que recibe dichos tokens.
+Desde el código bison se agrega además la lógica para construir el \emph{AST} que luego se ejecutará recursivamente.
+\newline
+
+Algunas aclaraciones de la implementación:
+
+\begin{itemize}
+  \item Además de los nodos del árbol que representan un grupo de funciones, una instrucción, un if, etc, hay un objeto global que se utiliza para generar scopes. El mismo se comporta como un stack y se utiliza para saber que variables son visibles tanto a la hora de parsear como ejecutar el código. Cuando se llama a una función, se pushea un estado nuevo al stack dejando vacía la definición de variables (excepto por los parámetros si hay alguno). Una vez que se retorna de la función, se popea el stack para volver al estado inicial del llamador.
+  \item Agregamos la funcionalidad de escribir sentencias directamente en el comando plot. Es decir, en vez de definir por ejemplo una función que haga \emph{x+x}, podemos escribirlo directamente en plot. Esto en particular hace que algunos casos que en los tests propuestos debieran dar un error, en nuestro compilador sean aceptados como válidos.
+  \item Se agregó la compatibilidad con código que hace recursión explícita.
+\end{itemize}

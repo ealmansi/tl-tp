@@ -1,0 +1,24 @@
+\section{Preguntas}
+\subsection{Si queremos que las condiciones sean booleanos solamente cómo podemos verificar esto estáticamente? Cómo incide en la gramática? Cómo lo resuelven otros lenguajes de programación?}
+
+Nuestra implementación ya contiene este tipo de chequeo de forma estática en la etapa de parseo. Obviamente esto implicó un cambio particular en la gramática que fue el de separar dos tipos de instrucciones entre predicados y el resto de las expresiones. De esta manera las instrucciones con una guarda, solo matchean si lo que está entre paréntesis es de tipo predicado.
+\newline
+
+Otra manera es la tradicional de manejar estos errores en lenguajes fuertemente tipados, que es mediante la declaración explícita del tipo de todas las variables y de todas las funciones. De esta manera el compilador sabe (o puede saberlo si se quiere hacer el chequeo) cual es el tipo de la expresión en la guarda. Es el tipo de chequeos que se puede n hacer en lenguajes como C, C++, Pascal, etc.
+\newline
+
+Otra metodología es la inferencia de tipos. Es decir, que ante la ausencia de hints de tipo de las funciones y las variables, el compilador mediante un algoritmo de inferencia de tipos deduce el tipo más general que puede cumplir con las operaciones de la instrucción. Mediante este tipo de chequeos se puede saber si la evaluación de la expresión puede retornar un booleano o no (en este caso, ya que es lo que nos interesa). Es muy común en los lenguajes funcionales fuertemente tipados. C++ es capaz de hacerlo desde el standard 11.
+\newline
+
+Existen también otras metodologías híbridas nacidas de los compiladores JIT. En general se tratan de tener compiladas más de una versión de la misma función con todas sus signaturas posibles, lo cual permitiría encontrar la versión que devuelva un booleano en la expresión evaluada.
+
+\subsection{Por qué no hacen falta terminadores de sentencia (ej .';') como en C/C++? Expliquen por
+qué hacen falta en esos lenguajes y por qué no en nuestro caso?}
+
+El principal motivo por el cual C y C++ tienen \emph{;} es que el mismo se usa como punto de secuencia. Es decir que todo efecto colateral de la expresión no puede afectar a la evaluación de las posteriores. Nuestro lenguaje no tiene efectos colaterales, con lo cual no es necesario este tipo de separaciones.
+
+\subsection{Si quisiéramos que no importe el orden en que están definidas las funciones dentro del código, cómo lo haríamos? Y para soportar recursión?}
+
+En nuestra implementación se mantiene un diccionario de símbolos donde se van agregando las funciones definidas a medida que se va parseando el código. En ese mismo momento se hace un chequeo de validez de una expresión fijándose que los llamados a funciones sean a funciones definidas (es decir que esté en el diccionario). Como esto se hace en el órden de parseo, no nos permite hacer lo preguntado. Para cambiarlo habría que postergar ese chequeo hasta que esté finalizado el parseo de todo el bloque completo de definición de funciones, o simplemente no chequearlo y fallar en tiempo de ejecución.
+\newline
+Para soportar recursión explícita es más simple. Basta con agregar al chequeo que la función esté en el diccionario o que sea la misma que se está definiendo. Si la función finalmente se define correctamente no tendremos ningún problema ya que la función existe, y si no, igualmente generaremos otro error que fue el que causó que no se pueda definir en un primer lugar. En particular la implementación nuestra soporta recursión explícita.

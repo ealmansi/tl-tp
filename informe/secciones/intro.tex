@@ -1,0 +1,17 @@
+\newpage
+\section{Introduccion}
+
+\noindent Se debe programar un compilador que parsee y ejecute código perteneciente al lenguaje \newline ``MyLanga''.
+Un programa bien formado en dicho lenguaje es una secuencia de definiciones de funciones, seguida de una última sentencia de ploteo. Dicha sentencia define un rango similar a un \emph{for} de una variable (o de un rango de Smalltalk, ya que define un desde-hasta y un step para cada iteración) y toma dos funciones como parámetro que son las que generan un x,y en cada iteración. Estos puntos son devueltos para graficarse mediante gnuplot.
+
+El lenguaje tiene una sintaxis similar a \emph{C}. En particular los operadores lógicos y aritméticos se pueden considerar idénticos. Al igual que \emph{while} e \emph{if} y sus guardas. Las diferencias más notables con respecto a \emph{C} serían:
+
+\begin{itemize}
+  \item Falta de $\bold{;}$ al final de cada instrucción.
+  \item Posibilidad de definir funciones sin llaves para el cuerpo cuando el mismo es de una sola instrucción.
+  \item Cuando el cuerpo del if tiene una sola instrucción se agrega el keyword $\bold{then}$ si se desea evitar llaves.
+	\item Constante $\bold{pi}$.
+	\item Las variables no se declaran ni se especifica estáticamente su tipo.
+\end{itemize}
+
+Otro problema a tener en cuenta es la detección de errores y la devolución de mensajes declarativos cuando los hubiera.
