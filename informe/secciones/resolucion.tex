@@ -16,3 +16,17 @@ Algunas aclaraciones de la implementación:
   \item Una vez generado el \emph{AST}, se realiza un proceso de verificación de validez sobre el programa. El mismo consiste en recorrer recursivamente el árbol, evaluando en cada nodo si este es válido, así como también sus hijos. El procedimiento se propaga independientemente de si se encuentra efectivamente algún error, permitiendo detectar múltiples problemas en una única pasada. Posteriormente, bajo la condición de que todos los nodos del árbol verificaran su condición de validez, se procede a ejecutar el comado plot.
   \item Se agregó la compatibilidad con código que hace recursión explícita. Esto se logró definiendo una función inmediatamente luego de leer su signatura, previo a evaluar la validez de su bloque de código correspondiente. Naturalmente, si se encuentra algún error en el cuerpo de la función, se elimina la misma de la tabla de contexto, generando posiblemente una serie de errores en el resto del programa donde la misma sea utilizada.
 \end{itemize}
+
+\subsection{Requisitos y modos de uso}
+
+
+\begin{itemize}
+  \item La implementación requiere tener instaladas las herramientas \emph{Flex} y \emph{Bison}.
+  \item La implementación del AST fue escrita en C++ standard 11. En el caso de usar g++, el mismo debe ser versión 4.7 o superior, para soportar la directiva -std=c++11. No es compatible con el std c++0x.
+  \item El script mylanga\_plot.sh grafica un archivo mylanga mediante la siguiente sintaxis: 
+	
+	./mylanga\_plot.sh programa.my salida.png
+	
+	Ejemplo: ./mylanga\_plot.sh circulo.my circulo.png
+	\item También se proveen los scripts correr-tests-correctos.sh y correr-tests-errores.sh para automatizar la corrida de los tests provistos por la cátedra.
+\end{itemize}

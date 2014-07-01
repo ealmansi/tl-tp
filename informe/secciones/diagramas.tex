@@ -1,0 +1,60 @@
+\subsection{Arquitectura}
+\subsubsection{Clases}
+\includegraphics[scale=0.45]{img/clases.png}
+
+En este diagrama de clases podemos observar la descripción de las clases más importantes de la resolución. En primer lugar tenemos al parser y el lexer, representando a Bison y a Flex que fueron elegidos a la hora de la resolución.
+Luego tenemos la tabla de símbolos utilizada para almacenar tanto el stack de variables en cada contexto de ejecución como las funciones definidas. Su comportamiento se verá más en detalle en las secuencias siguientes, a la hora de explicar tanto el proceso de validación como de ejecución y la importancia de este objeto.
+
+Luego tenemos los nodos AST, representados por una clase abstracta de la cual todos derivan. En particular la gran mayoría saben responder métodos de validación y de ejecución o evaluación. Nuevamente, esto se verá mejor explicado en las próximas secuencias.
+\newline
+
+A priori todo árbol comienza con un nodo de tipo programa que tiene un grupo de funciones definidas y un statement de ploteo.
+A su vez cada función tiene un bloque, y un bloque tiene statements. Los statements representan las estructuras de control de flujo de programa y las asignaciones. Por lo tanto, estas según la clase pueden tener a su vez bloques con statements, predicados o expresiones. En el esquema no se pusieron todas las relaciones entre statements predicados y expresiones ya que entorpecía la lectura. Solo se conservaron en el esquema las flechas de jerarquías y algunas relaciones esenciales. Para analizar el resto hay que mirar en detalle los atributos de la clase.
+\newline
+
+Las expresiones son literales, ids de variables u operadores sobre otras expresiones. Todas responden a la evaluación y chequeo de validez, al igual que los statements. Ya se puede suponer entonces la naturaleza recursiva de la implementación.
+\newline
+
+Por último los predicados al igual que las expresiones combinan operadores con expresiones, pero esta vez para evaluar condiciones binarias.
+\newline
+
+Por último la clase que representa al comando plot contiene las expresiones que generan el x e y, el id de la variable que se mueve en el rango a plotear, y las expresiones que calculan tanto el inicio como el incremento y el tope. Cabe recordar que en nuestra implementación el poder usar expresiones en lugar de llamados a funciones es una particularidad elegida para extender el lenguaje.
+
+\subsubsection{Segumiento de prueba}
+En las próximas secuencias intentaremos explicar como se relacionan estas clases mediante el seguimiento de este código simple de prueba:
+\begin{lstlisting}
+function test(x)
+	return x+1
+
+plot(test(x),test(x)) for x=1..1..6
+\end{lstlisting}
+
+\subsubsection{Secuencia global}
+\includegraphics[scale=0.6]{img/secuencia_general.png}
+
+La idea de esta secuencia es mostrar el funcionamiento a más alto nivel del compilador MyLanga. El parser le pide los tokens al lexer, y mediante sus reglas semánticas genera un AST basado en el código recibido. Luego el mismo pasa por una secuencia de validación donde más adelante veremos que se controlan una serie de condiciones, y finalmente se ejecuta para devolver las coordenadas a dibujar.
+\newpage
+
+\subsubsection{Secuencia de generación del AST}
+\includegraphics[scale=0.45]{img/secuencia_crea_AST.png}
+
+En esta secuencia vemos como se va armando el AST para el código de ejemplo. Para esto el parser genera instancias nuevas para X y el literal 1, y los junta en una expresion X+1. Esa expresión a su vez se incluye en un statement de retorno y pasa a formar un bloque de statements. Dicho bloque se agrega a una declaración de función junto a una lista de ids que son los parámetros, y dicha declaración se agrega a la lista de funciones declaradas. Esa lista más un comando plot pasan a formar un programa, y el árbol se completa.
+
+Para conservar la legibilidad del esquema no se puso como se forma el comando plot, ya que implica instanciar 5 expresiones y un id. Pero el comportamiento es idéntico al descripto anteriormente y se terminan agrupando en el nodo que lo representa.
+
+\subsubsection{Secuencia de validación del AST}
+\includegraphics[scale=0.45]{img/secuencia_Valida_AST.png}
+
+En esta secuencia vemos la etapa de validación, que básicamente propaga recursivamente por todo el árbol un llamado de chequeo de validez de cada nodo. Cada tipo de nodo tiene sus reglas para verificar dicha condición y recibe paramétricamente la tabla única de símbolos para realizar la tarea. En un primer lugar el programa le pide a cada una de sus funciones que se chequeen. Estas a su vez le piden a sus bloques que lo hagan. El bloque itera cada statement para pedirle a su vez la misma operación. Si todo está bien se pasa a chequear el comando plot que es la última instancia a considerar para verificar errores.
+\newline
+
+Cada expresión tiene un set de reglas para verificar validez. Por ejemplo un llamado a una función deberá verificar que la función esté definida. Si no está definida, a su vez puede ser un llamado recursivo y debiera ser válido también. (Esto no se ve en este ejemplo). Si es una expresión sobre un Id de variable, esta debe estar definida en el scope actual. Si una función pasa los chequeos, la misma debiera ser tenida en cuenta para futuros llamados. Todas estas cuestiones solo son posibles mediante la propagación recursiva del objeto de tabla de símbolos que almacena todas estas informaciones.
+
+\subsubsection{Secuencia de ejecución del AST}
+\includegraphics[scale=0.45]{img/secuencia_corre_AST.png}
+
+La idea en la ejecución es similar a la de la evaluación. El código se ejecuta recursivamente hasta llegar a evaluaciones, y esas evaluaciones son integradas mediante los statements que las invocan. A modo general el programa va a iterar el rango definido en el comando plot, y evaluar las expresiones (llamados a funciones) que generan X e Y.
+
+Una vez que se llama a la función, entramos en un scope nuevo que solo contiene como variables a los parámetros. A su vez cada función va a llamar a la corrida de su bloque, que llamará a la corrida de cada uno de sus statements, que a su vez evaluarán expresiones, que pueden llamar a otras funciones, etc.
+
+En particular algo que no se ve en este esquema es que el statement de asignación escribirá en el stack reemplazando (o definiendo) el valor de una variable. Si podemos ver claramente que para evaluar X+1 se busca el valor de X en el stack.
