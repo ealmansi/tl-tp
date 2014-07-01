@@ -2,14 +2,17 @@
 \section{Resolución y aclaraciones}
 \subsection{Generalidades}
 
-Para la resolución del problema planteado se decidió utilizar dos de las herramientas propuestas en clase. $\bold{Flex}$ para generar el analizador léxico que provea los tokens del código MyLanga, y $\bold{Bison}$ como generador del parser que recibe dichos tokens.
-Desde el código bison se agrega además la lógica para construir el \emph{AST} que luego se ejecutará recursivamente.
+Para la resolución del problema planteado se decidió utilizar dos de las herramientas propuestas en clase. El analizador léxico $\bold{Flex}$ se utilizó para especificar los tokens del lenguaje MyLanga, generando un \emph{scanner} que transforma el código a procesar en un stream de tokens. Estos tokens pasan a ser los terminales de la gramática que se utiliza para describir con precisión el lenguaje, a partir de la cual el generador de parsers $\bold{Bison}$ construye un parser para MyLanga.
+
+La definición de la gramática que se provee como entrada a $\bold{Bison}$, asociando a cada producción una regla semántica, la cual genera la lógica necesaria para construir el árbol de sintaxis, o \emph{AST}, que representa el programa procesado.
+
+De esta forma, el intérprete de MyLanga desarrollado utiliza el parser generado de forma automática, y posteriormente ejecuta el código codificado en el \emph{AST}.
 \newline
 
 Algunas aclaraciones de la implementación:
 
 \begin{itemize}
-  \item Además de los nodos del árbol que representan un grupo de funciones, una instrucción, un if, etc, hay un objeto global que se utiliza para generar scopes. El mismo se comporta como un stack y se utiliza para saber que variables son visibles tanto a la hora de parsear como ejecutar el código. Cuando se llama a una función, se pushea un estado nuevo al stack dejando vacía la definición de variables (excepto por los parámetros si hay alguno). Una vez que se retorna de la función, se popea el stack para volver al estado inicial del llamador.
-  \item Agregamos la funcionalidad de escribir sentencias directamente en el comando plot. Es decir, en vez de definir por ejemplo una función que haga \emph{x+x}, podemos escribirlo directamente en plot. Esto en particular hace que algunos casos que en los tests propuestos debieran dar un error, en nuestro compilador sean aceptados como válidos.
-  \item Se agregó la compatibilidad con código que hace recursión explícita.
+  \item Además de los nodos del árbol que representan un grupo de funciones, una instrucción, un if, etc, hay un objeto global que contiene la información contextual del programa, cumpliendo un propósito doble: por un lado, contiene un diccionario con las funciones definidas en el programa, y por el otro, se encarga de generar los scopes durante la ejecución. El mismo se comporta como un stack y se utiliza para saber que variables son visibles tanto a la hora de parsear como ejecutar el código. Cuando se realza un llamado a función, se pushea un estado nuevo al stack dejando vacía la definición de variables (excepto por los parámetros si hay alguno). Una vez que se retorna de la función, se popea el stack para volver al estado inicial del llamador.
+  \item Una vez generado el \emph{AST}, se realiza un proceso de verificación de validez sobre el programa. El mismo consiste en recorrer recursivamente el árbol, evaluando en cada nodo si este es válido, así como también sus hijos. El procedimiento se propaga independientemente de si se encuentra efectivamente algún error, permitiendo detectar múltiples problemas en una única pasada. Posteriormente, bajo la condición de que todos los nodos del árbol verificaran su condición de validez, se procede a ejecutar el comado plot.
+  \item Se agregó la compatibilidad con código que hace recursión explícita. Esto se logró definiendo una función inmediatamente luego de leer su signatura, previo a evaluar la validez de su bloque de código correspondiente. Naturalmente, si se encuentra algún error en el cuerpo de la función, se elimina la misma de la tabla de contexto, generando posiblemente una serie de errores en el resto del programa donde la misma sea utilizada.
 \end{itemize}

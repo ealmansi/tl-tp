@@ -15,7 +15,21 @@ Existen también otras metodologías híbridas nacidas de los compiladores JIT. En 
 \subsection{Por qué no hacen falta terminadores de sentencia (ej .';') como en C/C++? Expliquen por
 qué hacen falta en esos lenguajes y por qué no en nuestro caso?}
 
-El principal motivo por el cual C y C++ tienen \emph{;} es que el mismo se usa como punto de secuencia. Es decir que todo efecto colateral de la expresión no puede afectar a la evaluación de las posteriores. Nuestro lenguaje no tiene efectos colaterales, con lo cual no es necesario este tipo de separaciones.
+En los lenguajes C y C++, el punto y coma (;) es un terminador de \emph{statements}. El mismo es necesario por múltiples razones. Por un lado, en estos lenguajes es posible yuxtaponer sentencias que se pretende ejecutar en consecuencia, pero que también forman una sentencia válida si se las concatena. Por ejemplo:
+
+\begin{verbatim}
+a = b
+*c++
+\end{verbatim}
+
+podría interpretarse como:
+\begin{verbatim}
+a = b * c++
+\end{verbatim}
+
+Esto no sucede en MyLanga ya que al concatenar sentencias, no se genera otra que sea válida.
+
+Por otro lado, el punto y coma (;) delimita una barrera cronológica a partir de la cual se garantiza que se han ejecutado todos los efectos colaterales de las expresiones evaluadas. Estas barreras se denominan \emph{puntos de secuencia}, o \emph{sequence points}\footnote{http://en.wikipedia.org/wiki/Sequence\_point}. Nuestro lenguaje no tiene efectos colaterales, con lo cual no son necesarias este tipo de separaciones explícitas.
 
 \subsection{Si quisiéramos que no importe el orden en que están definidas las funciones dentro del código, cómo lo haríamos? Y para soportar recursión?}
 
