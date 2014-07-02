@@ -159,6 +159,85 @@ No presentamos los puntos ya que no son de una función conocida y por lo tanto n
 \includegraphics[trim = -20mm 0mm 0mm 0mm, scale=0.8]{img/rara.png}
 
 \subsection{Códigos con errores}
-\subsubsection{Primer ejemplo}
-\subsubsection{Segundo ejemplo}
-\subsubsection{Tercer ejemplo}
+
+Una manera de dar mensajes declarativos a la hora de encontrar un error de sintaxis, es hacer que el parser tenga reglas semánticas para esos errores, y de esa manera pueda dar un mensaje concreto para cada caso. A continuación enumeraremos algunos de los que puede arrojar el parser MyLanga.
+
+\subsubsection{Falta de instrucción plot}
+
+Si nuestro código solo contiene declaraciones de funciones como en el siguiente ejemplo, sin ningún comando plot al final, obtendremos este mensaje:
+
+\begin{lstlisting}
+function id(x)
+	return x
+\end{lstlisting}
+
+\begin{lstlisting}[language=sh]
+# ./mylanga_parser < testError1.my
+Error sintáctico detectado en la línea 3. | Falta definir la instrucción de plot.
+\end{lstlisting}
+
+Cabe destacar que esto solo funciona si el código es enviado via pipe. Sino es imposible saber si el bloque de definiciones de funciones ya hay finalizado.
+\newpage
+\subsubsection{Definición incompleta}
+
+En este caso, tenemos definida la función id correctamente y la instrucción plot que llama a id. El error nace de una definición incompleta de la función pepe cuyo bloque de instrucciones está vacío.
+
+\begin{lstlisting}
+function id(x)
+	return x
+	
+function pepe(x)
+
+plot(id(x),id(x)) for x = 1..1..5
+\end{lstlisting}
+
+\begin{lstlisting}[language=sh]
+# ./mylanga_parser < testError2.my
+Error sintáctico detectado en la línea 6. | La definición de la función 'pepe'
+está incompleta.
+\end{lstlisting}
+
+
+\subsubsection{Falta de keyword then}
+
+En este caso, nos olvidamos de poner el then luego de la guarda del if. Vemos como no solo el error nos indica eso, sino que también el error implica que la función test no se puede definir correctamente, y por lo tanto ambas sentencias del plot fallan con el mismo error.
+
+\begin{lstlisting}
+function test(x)
+{
+	if x==2
+		x=1
+	return x
+}
+	
+plot(test(x),test(x)) for x = 1..1..7
+\end{lstlisting}
+
+\begin{lstlisting}[language=sh]
+# ./mylanga_parser < testError3.my
+Error sintáctico detectado en la línea 4. | Falta la palabra clave 'then'
+en la instrucción if.
+Error de parseo detectado en la línea 8 | La función 'test' no se encuentra definida.
+Error de parseo detectado en la línea 8 | La función 'test' no se encuentra definida.
+\end{lstlisting}
+
+Estos son algunos de los errores detectados en el parseo, aunque son muchos otros los que se pueden detectar. Sin embargo, también pueden haber errores durante la etapa de ejecución. A continuación veremos uno.
+
+\subsubsection{La función no devuelve un valor}
+
+Como vemos en el código, la función solo retorna con x=2.
+
+\begin{lstlisting}
+function test(x)
+	if x==2 then return x
+	
+plot(test(x),test(x)) for x = 1..1..7
+\end{lstlisting}
+
+\begin{lstlisting}[language=sh]
+# ./mylanga_parser < testError4.my
+Error en tiempo de ejecución. | La función 'test' se ejecutó sin retornar un valor.
+(x) Terminando la ejecución abruptamente ...
+\end{lstlisting}
+
+Mostramos este ejemplo en particular entre otros, ya que el chequeo de retorno en una función es algo que en otros lenguajes se detecta en la etapa de parseo, aunque con cierta complejidad. Esto implicaría saber si existe alguna rama del árbol que genera el flujo de control de la función que termina sin retornar un valor. En este caso decidimos hacerlo más simple y detectarlo en tiempo de ejecución...
