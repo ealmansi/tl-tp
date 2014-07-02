@@ -1,22 +1,32 @@
 \contentsline {section}{\numberline {1}Introduccion}{3}
 \contentsline {section}{\numberline {2}Resoluci\'on y aclaraciones}{4}
 \contentsline {subsection}{\numberline {2.1}Generalidades}{4}
-\contentsline {subsection}{\numberline {2.2}Gram\'atica}{5}
-\contentsline {subsection}{\numberline {2.3}Flex}{7}
-\contentsline {subsection}{\numberline {2.4}Bison}{9}
-\contentsline {subsection}{\numberline {2.5}Implementaci\'on del AST}{13}
-\contentsline {subsubsection}{\numberline {2.5.1}Definici\'on de clases y estructuras}{13}
-\contentsline {subsubsection}{\numberline {2.5.2}Implementaci\'on de clases y estructuras}{19}
-\contentsline {section}{\numberline {3}Ejemplos y resultados}{27}
-\contentsline {subsection}{\numberline {3.1}C\'odigos correctos y resultados generados}{27}
-\contentsline {subsubsection}{\numberline {3.1.1}Primer ejemplo: Par\'abola}{27}
-\contentsline {subsubsection}{\numberline {3.1.2}Segundo ejemplo: Seno}{28}
-\contentsline {subsubsection}{\numberline {3.1.3}Tercer ejemplo: Superficie 3D!}{29}
-\contentsline {subsection}{\numberline {3.2}C\'odigos con errores}{31}
-\contentsline {subsubsection}{\numberline {3.2.1}Primer ejemplo}{31}
-\contentsline {subsubsection}{\numberline {3.2.2}Segundo ejemplo}{31}
-\contentsline {subsubsection}{\numberline {3.2.3}Tercer ejemplo}{31}
-\contentsline {section}{\numberline {4}Preguntas}{32}
-\contentsline {subsection}{\numberline {4.1}Si queremos que las condiciones sean booleanos solamente c\'omo podemos verificar esto est\'aticamente? C\'omo incide en la gram\'atica? C\'omo lo resuelven otros lenguajes de programaci\'on?}{32}
-\contentsline {subsection}{\numberline {4.2}Por qu\'e no hacen falta terminadores de sentencia (ej .';') como en C/C++? Expliquen por qu\'e hacen falta en esos lenguajes y por qu\'e no en nuestro caso?}{32}
-\contentsline {subsection}{\numberline {4.3}Si quisi\'eramos que no importe el orden en que est\'an definidas las funciones dentro del c\'odigo, c\'omo lo har\IeC {\'\i }amos? Y para soportar recursi\'on?}{33}
+\contentsline {subsection}{\numberline {2.2}Requisitos y modos de uso}{4}
+\contentsline {subsection}{\numberline {2.3}Gram\'atica}{5}
+\contentsline {subsection}{\numberline {2.4}Arquitectura}{7}
+\contentsline {subsubsection}{\numberline {2.4.1}Clases}{7}
+\contentsline {subsubsection}{\numberline {2.4.2}Segumiento de prueba}{8}
+\contentsline {subsubsection}{\numberline {2.4.3}Secuencia global}{9}
+\contentsline {subsubsection}{\numberline {2.4.4}Secuencia de generaci\'on del AST}{10}
+\contentsline {subsubsection}{\numberline {2.4.5}Secuencia de validaci\'on del AST}{11}
+\contentsline {subsubsection}{\numberline {2.4.6}Secuencia de ejecuci\'on del AST}{12}
+\contentsline {subsection}{\numberline {2.5}Flex}{13}
+\contentsline {subsection}{\numberline {2.6}Bison}{15}
+\contentsline {subsection}{\numberline {2.7}Implementaci\'on del AST}{19}
+\contentsline {subsubsection}{\numberline {2.7.1}Definici\'on de clases y estructuras}{19}
+\contentsline {subsubsection}{\numberline {2.7.2}Implementaci\'on de clases y estructuras}{25}
+\contentsline {section}{\numberline {3}Ejemplos y resultados}{33}
+\contentsline {subsection}{\numberline {3.1}C\'odigos correctos y resultados generados}{33}
+\contentsline {subsubsection}{\numberline {3.1.1}Primer ejemplo: Par\'abola}{33}
+\contentsline {subsubsection}{\numberline {3.1.2}Segundo ejemplo: Seno}{34}
+\contentsline {subsubsection}{\numberline {3.1.3}Tercer ejemplo: Superficie 3D!}{35}
+\contentsline {subsection}{\numberline {3.2}C\'odigos con errores}{37}
+\contentsline {subsubsection}{\numberline {3.2.1}Falta de instrucci\'on plot}{37}
+\contentsline {subsubsection}{\numberline {3.2.2}Definici\'on incompleta}{38}
+\contentsline {subsubsection}{\numberline {3.2.3}Falta de keyword then}{38}
+\contentsline {subsubsection}{\numberline {3.2.4}La funci\'on no devuelve un valor}{38}
+\contentsline {section}{\numberline {4}Preguntas}{40}
+\contentsline {subsection}{\numberline {4.1}Si queremos que las condiciones sean booleanos solamente c\'omo podemos verificar esto est\'aticamente? C\'omo incide en la gram\'atica? C\'omo lo resuelven otros lenguajes de programaci\'on?}{40}
+\contentsline {subsection}{\numberline {4.2}Por qu\'e no hacen falta terminadores de sentencia (ej .';') como en C/C++? Expliquen por qu\'e hacen falta en esos lenguajes y por qu\'e no en nuestro caso?}{40}
+\contentsline {subsection}{\numberline {4.3}Si quisi\'eramos que no importe el orden en que est\'an definidas las funciones dentro del c\'odigo, c\'omo lo har\IeC {\'\i }amos? Y para soportar recursi\'on?}{41}
+\contentsline {section}{\numberline {5}Conclusiones}{41}
