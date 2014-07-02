@@ -3,7 +3,7 @@ AUTO 	= $(SRC)/auto
 OBJ 	= obj
 BIN 	= bin
 OUTPUT_DIRS 	= $(OBJ) $(AUTO) $(BIN)
-CXXFLAGS 	= -std=c++11 -I$(SRC) -I$(AUTO)
+CXXFLAGS 	= -std=c++0x -I$(SRC) -I$(AUTO)
 
 all: $(OUTPUT_DIRS) $(BIN)/mylanga_parser
 

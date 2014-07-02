@@ -12,8 +12,7 @@ using namespace std;
 typedef string id;
 
 #include <memory>
-template <typename T>
-using ptr = shared_ptr<T>;
+#define ptr shared_ptr
 #define mp make_shared
 
 struct ast_expr;
